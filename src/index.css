@@ -416,6 +416,8 @@ body {
   color: var(--muted);
 }
 
+.foot-hint { opacity: 0.75; }
+
 /* Narrow screens: stack and scroll. Not the target, but still usable. */
 @media (max-width: 900px) {
   :root { --u: 9px; }

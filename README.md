@@ -32,7 +32,7 @@ The order of `TASKS` is the order of the cards in the tray and the order a click
 - **Clicking a placed card** shows its reason again. To send a card back, point at it and click the small × in its corner.
 - **A presentation clicker works.** Right arrow, Down arrow, Page Down or Space reveals the next card in tray order, without a class call. Left arrow, Up arrow or Page Up sends the most recent card back.
 - **Show all** places the remaining cards one after another. **Clear** resets the slide. Reloading the page also resets it.
-- **Go full screen** with Ctrl+Cmd+F in Safari or Chrome on a Mac, or F11 on Windows. The slide scales to fit any 16:9 screen without scrolling.
+- **Press F** to go full screen, and F or Escape to leave. The slide scales to fit any 16:9 screen without scrolling.
 - **It works offline** once it has loaded, so a flaky classroom Wi-Fi does not matter. For extra safety, run `npm run build && npm run preview` on the presenting laptop.
 
 ## Deploy

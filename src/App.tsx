@@ -21,6 +21,7 @@ export default function App() {
   placedRef.current = placed
   const pendingRef = useRef<string | null>(null)
   pendingRef.current = pending
+  const [fullScreen, setFullScreen] = useState(false)
 
   // The element currently showing each card (tray chip or map chip), and each quadrant.
   const cardEls = useRef(new Map<string, HTMLElement>())
@@ -139,10 +140,21 @@ export default function App() {
 
   useEffect(() => cancelTimers, [])
 
+  // F toggles full screen; the footer hint hides itself while full screen is on.
+  useEffect(() => {
+    const sync = () => setFullScreen(document.fullscreenElement !== null)
+    document.addEventListener('fullscreenchange', sync)
+    return () => document.removeEventListener('fullscreenchange', sync)
+  }, [])
+
   // Presentation clickers send these keys.
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.metaKey || e.ctrlKey || e.altKey) return
+      if (e.key === 'f' || e.key === 'F') {
+        toggleFullScreen()
+        return
+      }
       if (e.key === 'Escape' && pendingRef.current) {
         setPending(null)
         return
@@ -310,10 +322,19 @@ export default function App() {
 
       <footer className="foot">
         <span>MGMT 6110 · Week 7 · The Map of Human-AI Collaboration</span>
+        {canFullScreen && !fullScreen && <span className="foot-hint">Press F for full screen</span>}
         <span>Human-AI Group 8 · SMU Lee Kong Chian School of Business</span>
       </footer>
     </main>
   )
+}
+
+const canFullScreen = typeof document !== 'undefined' && document.fullscreenEnabled
+
+function toggleFullScreen() {
+  if (!canFullScreen) return
+  if (document.fullscreenElement) void document.exitFullscreen()
+  else void document.documentElement.requestFullscreen().catch(() => {})
 }
 
 function Row({ row, children }: { row: 'together' | 'alone'; children: ReactNode }) {
