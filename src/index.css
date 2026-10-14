@@ -18,7 +18,7 @@
   --blue: #0071e3;          /* primary button, lifted card */
   --eyebrow: #bf4800;       /* Apple's orange eyebrow */
   --agree: #248a3d;
-  --differ: #d70015;
+  --differ: #bf4800;
 
   /* The two quadrant tones: pink = a person leads, blue = AI does the work */
   --pink: #c8105a;
@@ -417,6 +417,13 @@ body {
 .verdict-none { color: var(--secondary); }
 .verdict-agree { color: var(--agree); }
 .verdict-differ { color: var(--differ); }
+
+.verdict-icon {
+  width: 1.15em;
+  height: 1.15em;
+  margin-right: 0.3em;
+  vertical-align: -0.2em;
+}
 
 /* Tray and buttons */
 

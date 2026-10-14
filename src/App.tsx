@@ -9,6 +9,7 @@ import {
   verdict,
   verdictLine,
 } from './placement.ts'
+import { CheckCircle, Swap } from './icons.tsx'
 import { COLUMNS, GROUP_MEMBERS, QUADRANTS, ROWS, TASKS, TONES, type QuadrantId } from './tasks.ts'
 
 const FLIGHT_MS = 450
@@ -299,6 +300,8 @@ export default function App() {
                     ·
                   </span>
                   <span className={`verdict verdict-${shownVerdict}`}>
+                    {shownVerdict === 'agree' && <CheckCircle className="verdict-icon" />}
+                    {shownVerdict === 'differ' && <Swap className="verdict-icon" />}
                     {verdictLine(quadName(guesses[shownTask.id]), quadName(shownTask.quadrant) ?? '')}
                   </span>
                 </p>
