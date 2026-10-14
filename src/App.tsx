@@ -12,7 +12,9 @@ import {
 import { CheckCircle, Swap } from './icons.tsx'
 import { COLUMNS, GROUP_MEMBERS, QUADRANTS, ROWS, TASKS, TONES, type QuadrantId } from './tasks.ts'
 
-const FLIGHT_MS = 450
+const FLIGHT_MS = 560
+// Apple-style spring: the card overshoots its spot a touch and settles back.
+const SPRING = 'cubic-bezier(.3, 1.35, .5, 1)'
 const GLOW_MS = 900
 const SHOW_ALL_STEP_MS = 150
 
@@ -69,12 +71,21 @@ export default function App() {
         const to = el.getBoundingClientRect()
         const dx = from.left - to.left
         const dy = from.top - to.top
+        // Position springs; size lifts a little mid-flight and settles; the shadow fades as it lands.
+        el.animate([{ translate: `${dx}px ${dy}px` }, { translate: '0 0' }], {
+          duration: FLIGHT_MS,
+          easing: SPRING,
+        })
+        el.animate([{ scale: 1 }, { scale: 1.06, offset: 0.35 }, { scale: 1 }], {
+          duration: FLIGHT_MS,
+          easing: 'ease-in-out',
+        })
         el.animate(
           [
-            { transform: `translate(${dx}px, ${dy}px)`, boxShadow: '0 10px 28px rgba(20,40,75,.22)' },
-            { transform: 'translate(0, 0)', boxShadow: '0 0 0 rgba(20,40,75,0)' },
+            { boxShadow: '0 12px 30px rgba(0,0,0,.18)' },
+            { boxShadow: '0 0 0 rgba(0,0,0,0)' },
           ],
-          { duration: FLIGHT_MS, easing: 'cubic-bezier(.2,.8,.2,1)' },
+          { duration: FLIGHT_MS, easing: 'ease-out' },
         )
       }
       const q = glow && quadEls.current.get(glow)

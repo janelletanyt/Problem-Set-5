@@ -312,6 +312,7 @@ body {
 .placed {
   position: relative;
   display: inline-flex;
+  border-radius: calc(var(--u) * 1.2); /* so the flight shadow follows the chip's corners */
 }
 
 .card-placed {
