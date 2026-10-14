@@ -34,6 +34,11 @@ export default function App() {
   const pendingRef = useRef<string | null>(null)
   pendingRef.current = pending
   const [fullScreen, setFullScreen] = useState(false)
+  // Light by default; D switches to the dark theme for a dim room. Never follows the OS setting.
+  const [dark, setDark] = useState(false)
+  useEffect(() => {
+    document.documentElement.dataset.theme = dark ? 'dark' : 'light'
+  }, [dark])
 
   // The element currently showing each card (tray chip or map chip), and each quadrant.
   const cardEls = useRef(new Map<string, HTMLElement>())
@@ -176,6 +181,10 @@ export default function App() {
         toggleFullScreen()
         return
       }
+      if (e.key === 'd' || e.key === 'D') {
+        setDark((d) => !d)
+        return
+      }
       if (e.key === 'Escape' && pendingRef.current) {
         setPending(null)
         return
@@ -214,7 +223,11 @@ export default function App() {
   return (
     <>
       <main className="slide">
-        {canFullScreen && !fullScreen && <span className="fs-hint">Press F for full screen</span>}
+        {!fullScreen && (
+          <span className="fs-hint">
+            {canFullScreen && 'Press F for full screen · '}D for {dark ? 'light' : 'dark'}
+          </span>
+        )}
         <header className="head">
           <p className="kicker">Place a task · Your turn</p>
           <h1 className="title">Where would you place each of these tasks, and who should lead it?</h1>

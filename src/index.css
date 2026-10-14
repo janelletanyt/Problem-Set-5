@@ -13,9 +13,18 @@
   --tertiary: #86868b;
   --hairline: #d2d2d7;
   --chip-line: rgba(0, 0, 0, 0.08);
+  --surface: #ffffff;       /* chips and the reason tile */
+  --on-ink: #ffffff;        /* text on an ink-filled pill: badge, current card, x */
+  --x-ring: #ffffff;
+  --slot-bg: rgba(0, 0, 0, 0.035);
+  --slot-ink: #aeaeb2;
+  --chip-shadow: rgba(0, 0, 0, 0.05);
+  --chip-shadow-hover: rgba(0, 0, 0, 0.1);
+  --purple: #8a3ffc;        /* middle of the closing question's gradient */
 
   /* Accents */
   --blue: #0071e3;          /* primary button, lifted card */
+  --link: #0071e3;          /* outlined button text and edge */
   --eyebrow: #bf4800;       /* Apple's orange eyebrow */
   --agree: #248a3d;
   --differ: #bf4800;
@@ -108,7 +117,7 @@ body {
 /* Once every card is placed, the subtitle becomes a question in Apple's gradient type. */
 .subtitle-closing {
   font-weight: 600;
-  background: linear-gradient(90deg, var(--pink), #8a3ffc 50%, var(--sky));
+  background: linear-gradient(90deg, var(--pink), var(--purple) 50%, var(--sky));
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -143,7 +152,7 @@ body {
   font-weight: 600;
   font-size: calc(var(--u) * 1);
   letter-spacing: -0.005em;
-  color: #fff;
+  color: var(--on-ink);
   background: var(--ink);
   padding: calc(var(--u) * 0.35) calc(var(--u) * 1);
   border-radius: 980px;
@@ -296,17 +305,17 @@ body {
   letter-spacing: -0.01em;
   line-height: 1.2;
   color: var(--ink);
-  background: #fff;
+  background: var(--surface);
   border: 1px solid var(--chip-line);
   border-radius: calc(var(--u) * 1.2);
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 1px 2px var(--chip-shadow);
   padding: calc(var(--u) * 0.5) calc(var(--u) * 1.05);
   cursor: pointer;
   text-align: left;
   transition: box-shadow 150ms ease-out, transform 150ms ease-out, scale 100ms ease-out;
 }
 
-.card:hover { box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1); }
+.card:hover { box-shadow: 0 4px 14px var(--chip-shadow-hover); }
 
 /* Pressed: controls shrink a touch while held, as on iOS, so every click feels confirmed. */
 .card:active,
@@ -347,9 +356,9 @@ body {
   width: max(24px, calc(var(--u) * 1.7));
   height: max(24px, calc(var(--u) * 1.7));
   border-radius: 50%;
-  border: 2px solid #fff;
+  border: 2px solid var(--x-ring);
   background: var(--ink);
-  color: #fff;
+  color: var(--on-ink);
   font: 500 calc(var(--u) * 1.2) / 1 var(--sans);
   display: grid;
   place-items: center;
@@ -376,13 +385,13 @@ body {
 .card-current {
   background: var(--ink);
   border-color: var(--ink);
-  color: #fff;
+  color: var(--on-ink);
 }
 
 /* Where a placed card came from: its name stays, faint, so the tray never reads as blank. */
 .card-slot {
-  color: #aeaeb2;
-  background: rgba(0, 0, 0, 0.035);
+  color: var(--slot-ink);
+  background: var(--slot-bg);
   border-color: transparent;
   box-shadow: none;
   cursor: default;
@@ -395,7 +404,7 @@ body {
 
 .reason {
   position: relative;
-  background: #fff;
+  background: var(--surface);
   border-radius: calc(var(--u) * 1.2);
   padding: calc(var(--u) * 0.65) calc(var(--u) * 1.4) calc(var(--u) * 0.65) calc(var(--u) * 2);
   min-height: calc(var(--u) * 4.2);
@@ -479,9 +488,9 @@ body {
   font-size: calc(var(--u) * var(--tray-card));
   letter-spacing: -0.01em;
   line-height: 1.2;
-  color: var(--blue);
+  color: var(--link);
   background: transparent;
-  border: 1px solid var(--blue);
+  border: 1px solid var(--link);
   border-radius: 980px;
   padding: calc(var(--u) * 0.5) calc(var(--u) * 1.3);
   cursor: pointer;
@@ -534,6 +543,37 @@ body {
 }
 
 .foot > span { white-space: nowrap; }
+
+/* Dark theme, toggled with D for dim lecture halls. It follows Apple's dark product pages,
+   and it never follows the laptop's own dark mode, so the slide only changes on purpose. */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --page: #000000;
+  --tile: #161617;
+  --ink: #f5f5f7;
+  --secondary: #a1a1a6;
+  --tertiary: #86868b;
+  --hairline: #424245;
+  --chip-line: rgba(255, 255, 255, 0.1);
+  --surface: #2c2c2e;
+  --on-ink: #1d1d1f;
+  --x-ring: #161617;
+  --slot-bg: rgba(255, 255, 255, 0.05);
+  --slot-ink: #636366;
+  --chip-shadow: rgba(0, 0, 0, 0.4);
+  --chip-shadow-hover: rgba(0, 0, 0, 0.6);
+  --purple: #bf5af2;
+  --eyebrow: #f56300;
+  --agree: #30d158;
+  --differ: #ff9f0a;
+  --pink: #ff6b9d;
+  --pink-tint: #2a1520;
+  --pink-glow: rgba(255, 107, 157, 0.35);
+  --sky: #2997ff;
+  --link: #2997ff;
+  --sky-tint: #0d1f33;
+  --sky-glow: rgba(41, 151, 255, 0.35);
+}
 
 /* A phone held upright shows the slide small; one line under it says to turn the phone. */
 .rotate-hint {
