@@ -28,7 +28,7 @@ The order of `TASKS` is the order of the cards in the tray and the order a click
 
 ## Presenting
 
-- **Clicking a card** places it. Clicking a placed card sends it back to the tray.
+- **Clicking a card** places it. Clicking a placed card shows its reason again. To send a card back, point at it and click the small × in its corner.
 - **A presentation clicker works.** Right arrow, Down arrow, Page Down or Space places the next card in tray order. Left arrow, Up arrow or Page Up sends the most recent card back.
 - **Show all** places the remaining cards one after another. **Clear** resets the slide. Reloading the page also resets it.
 - **Go full screen** with Ctrl+Cmd+F in Safari or Chrome on a Mac, or F11 on Windows. The slide scales to fit any 16:9 screen without scrolling.

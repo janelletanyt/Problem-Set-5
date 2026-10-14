@@ -212,6 +212,39 @@ body {
   padding: calc(var(--u) * 0.35) calc(var(--u) * 0.75);
 }
 
+.placed {
+  position: relative;
+  display: inline-flex;
+}
+
+/* The small x that sends a placed card back. Hidden until you point at the card. */
+.card-x {
+  position: absolute;
+  top: calc(var(--u) * -0.75);
+  right: calc(var(--u) * -0.75);
+  width: max(24px, calc(var(--u) * 1.7));
+  height: max(24px, calc(var(--u) * 1.7));
+  border-radius: 50%;
+  border: 2px solid #fff;
+  background: var(--crimson);
+  color: #fff;
+  font: 700 calc(var(--u) * 1.2) / 1 var(--body);
+  display: grid;
+  place-items: center;
+  padding: 0;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 120ms ease-out;
+}
+
+.placed:hover .card-x,
+.placed:focus-within .card-x { opacity: 1; }
+
+.card-x:focus-visible {
+  outline: 3px solid var(--teal);
+  outline-offset: 1px;
+}
+
 .card-current {
   background: var(--ink);
   color: #fff;

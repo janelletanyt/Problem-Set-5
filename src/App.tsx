@@ -30,7 +30,7 @@ export default function App() {
 
   const recordFlight = (id: string, glow?: QuadrantId) => {
     const el = cardEls.current.get(id)
-    if (el) flights.current.set(id, { from: el.getBoundingClientRect(), glow, hadFocus: el === document.activeElement })
+    if (el) flights.current.set(id, { from: el.getBoundingClientRect(), glow, hadFocus: el.contains(document.activeElement) })
   }
 
   // FLIP: after React moves a card, start it where it was and glide it home.
@@ -177,15 +177,23 @@ export default function App() {
                   <h3 className="quad-name">{q.name}</h3>
                   <div className="quad-cards">
                     {inQuadrant(placed, TASKS, q.id).map((t) => (
-                      <button
-                        key={t.id}
-                        ref={cardRef(t.id)}
-                        className={`card card-placed${t.id === shown ? ' card-current' : ''}`}
-                        onClick={() => returnCard(t.id)}
-                        title="Send back to the tray"
-                      >
-                        {t.label}
-                      </button>
+                      <span key={t.id} ref={cardRef(t.id)} className="placed">
+                        <button
+                          className={`card card-placed${t.id === shown ? ' card-current' : ''}`}
+                          onClick={() => setShown(t.id)}
+                          aria-pressed={t.id === shown}
+                        >
+                          {t.label}
+                        </button>
+                        <button
+                          className="card-x"
+                          onClick={() => returnCard(t.id)}
+                          aria-label={`Send ${t.label} back to the tray`}
+                          title="Send back to the tray"
+                        >
+                          ×
+                        </button>
+                      </span>
                     ))}
                   </div>
                 </div>
