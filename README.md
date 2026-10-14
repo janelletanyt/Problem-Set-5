@@ -33,7 +33,7 @@ The order of `TASKS` is the order of the cards in the tray and the order a click
 - **Clicking a card** lifts it. Click the quadrant the class called and the card lands where we placed it, with a line saying whether the class agreed. Click the lifted card again to reveal it without a call, or press Escape to put it down.
 - **Clicking a placed card** shows its reason again. To send a card back, point at it and click the small × in its corner.
 - **A presentation clicker works.** Right arrow, Down arrow, Page Down or Space reveals the next card in tray order, without a class call. Left arrow, Up arrow or Page Up sends the most recent card back.
-- **Show all** places the remaining cards one after another. **Clear** resets the slide. Reloading the page also resets it.
+- **Show all** places the remaining cards one after another. **Clear** resets the slide, and once all six are placed it becomes a **Start over ›** link. Reloading the page also resets it.
 - **Press F** to go full screen, and F or Escape to leave. The slide always keeps its 16:9 shape and scales to fit any window, so nothing ever scrolls. On a phone, turn it sideways.
 - **It works offline** once it has loaded, so a flaky classroom Wi-Fi does not matter. For extra safety, run `npm run build && npm run preview` on the presenting laptop.
 

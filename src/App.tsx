@@ -341,12 +341,21 @@ export default function App() {
                 </button>
               ),
             )}
-            <button className="btn btn-solid" onClick={showAll} disabled={placed.length === TASKS.length}>
-              Show all
-            </button>
-            <button className="btn" onClick={clearAll} disabled={placed.length === 0}>
-              Clear
-            </button>
+            {placed.length === TASKS.length ? (
+              // Nothing left to show, so the dead button goes and one Apple-style text link remains.
+              <button className="link" onClick={clearAll}>
+                Start over<span aria-hidden="true"> ›</span>
+              </button>
+            ) : (
+              <>
+                <button className="btn btn-solid" onClick={showAll}>
+                  Show all
+                </button>
+                <button className="btn" onClick={clearAll} disabled={placed.length === 0}>
+                  Clear
+                </button>
+              </>
+            )}
           </div>
         </section>
 

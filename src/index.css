@@ -479,6 +479,27 @@ body {
   cursor: default;
 }
 
+/* "Start over ›", in the style of apple.com's "Learn more ›" links */
+.link {
+  font: inherit;
+  font-size: calc(var(--u) * var(--tray-card));
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+  color: var(--sky);
+  background: none;
+  border: 0;
+  padding: calc(var(--u) * 0.5) calc(var(--u) * 0.6);
+  cursor: pointer;
+}
+
+.link:hover { text-decoration: underline; }
+
+.link:focus-visible {
+  outline: 3px solid var(--blue);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
 /* Footer */
 
 .foot {
