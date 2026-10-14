@@ -248,6 +248,8 @@ body {
 
 .reason strong { font-weight: 700; }
 
+.reason-idle { color: var(--muted); }
+
 .reason-where {
   color: var(--teal);
   font-weight: 600;
@@ -284,15 +286,6 @@ body {
   cursor: default;
 }
 
-.hint {
-  margin: 0;
-  background: #eef2f6;
-  border-left: calc(var(--u) * 0.3) solid var(--teal);
-  padding: calc(var(--u) * 0.4) calc(var(--u) * 1.4);
-  font-size: calc(var(--u) * 1.1);
-  font-style: italic;
-  color: var(--teal);
-}
 
 /* Footer */
 

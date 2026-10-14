@@ -11,18 +11,17 @@ A Vite + React + TypeScript project in `human-ai-group-8/` with plain CSS, a REA
 
 1. **Kicker** — small spaced capitals in teal: "PLACE A TASK · YOUR TURN".
 2. **Title** — "Where would you place each of these tasks, and who should lead it?"
-3. **Subtitle** — "Call the quadrant for each task before we click. Our placement and its reason appear below, and you may well place some differently."
+3. **Subtitle** — "Call the quadrant for each task before we click. The placements are our group's view, and you may well place some differently." This is the only place the slide tells the audience what to do.
 4. **Explainer panel** — a pale card with a crimson bar down its left edge. Inside, top left, a crimson pill badge with a small yellow dot: "HUMAN-AI GROUP 8". Top right, a monospace status line: "Click a task" before anything is placed, then "3 of 6 placed", then "All 6 placed".
 5. **The map** — inside the panel, a 2×2 grid with these labels, exactly as in the course slide:
    - Column headings: "Work with a right answer" (left), "Work with no single right answer" (right).
    - Row headings: "Work that people and AI must do together" (top), "Work that either of them can do alone" (bottom).
    - Quadrants: top left "A person leads, AI inside" (pink), top right "Agents run it, a person judges" (blue), bottom left "AI alone, with checks" (blue), bottom right "A person decides, AI alongside" (pink).
    Each quadrant shows its name in bold at the top left, and placed cards stack below it as chips.
-6. **Reason panel** — a strip under the map with a teal bar on the left. Before anything is placed: "Call the quadrant first, then click the task to see where we would place it and why." After a click: the task name in bold, the quadrant it landed in, and the group's reason. The quadrant that just received a card glows briefly.
+6. **Reason panel** — a strip under the map with a teal bar on the left. Before anything is placed, a muted "Pick a task below to start." After a click: the task name in bold, the quadrant it landed in, and the group's reason. The quadrant that just received a card glows briefly.
 7. **Task tray** — the six cards as outlined chips in one wrapping row, followed by a filled navy "Show all" button and an outlined "Clear" button. A placed card leaves a faint dashed outline in its slot, so the tray never reflows.
-8. **Hint line** — a muted italic line with a small triangle: "Click a task card to place it, or Show all. The placements are our group's view, for discussion."
-9. **Footer** — a thin rule, then "MGMT 6110 · Week 7 · The Map of Human-AI Collaboration" on the left and "Human-AI Group 8 · SMU Lee Kong Chian School of Business" on the right.
-10. **README** — run it locally, how to edit the tasks and reasons, presenting tips (clicker keys, browser full screen), deploy to Vercel, project layout, a short "Next" list.
+8. **Footer** — a thin rule, then "MGMT 6110 · Week 7 · The Map of Human-AI Collaboration" on the left and "Human-AI Group 8 · SMU Lee Kong Chian School of Business" on the right.
+9. **README** — run it locally, how to edit the tasks and reasons, presenting tips (clicker keys, browser full screen), deploy to Vercel, project layout, a short "Next" list.
 
 **The six tasks, their quadrants and reasons** (reasons are drafts for the group to edit in `src/tasks.ts`):
 

@@ -145,8 +145,8 @@ export default function App() {
       <p className="kicker">Place a task · Your turn</p>
       <h1 className="title">Where would you place each of these tasks, and who should lead it?</h1>
       <p className="subtitle">
-        Call the quadrant for each task before we click. Our placement and its reason appear below, and you
-        may well place some differently.
+        Call the quadrant for each task before we click. The placements are our group's view, and you may
+        well place some differently.
       </p>
 
       <section className="panel" aria-label="Map of human-AI collaboration">
@@ -201,7 +201,7 @@ export default function App() {
               <span className="reason-where"> lands in {shownQuadrant.name}.</span> {shownTask.reason}
             </p>
           ) : (
-            <p>Call the quadrant first, then click the task to see where we would place it and why.</p>
+            <p className="reason-idle">Pick a task below to start.</p>
           )}
         </div>
 
@@ -224,11 +224,6 @@ export default function App() {
             Clear
           </button>
         </div>
-
-        <p className="hint">
-          <span aria-hidden="true">▸ </span>
-          Click a task card to place it, or Show all. The placements are our group's view, for discussion.
-        </p>
       </section>
 
       <footer className="foot">
