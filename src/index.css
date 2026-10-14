@@ -53,6 +53,18 @@ body {
   flex-direction: column;
 }
 
+.kicker-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.fs-hint {
+  font-size: calc(var(--u) * 1.05);
+  color: var(--muted);
+  opacity: 0.75;
+}
+
 .kicker {
   margin: 0;
   font-family: var(--display);
@@ -402,7 +414,6 @@ body {
   cursor: default;
 }
 
-
 /* Footer */
 
 .foot {
@@ -416,7 +427,7 @@ body {
   color: var(--muted);
 }
 
-.foot-hint { opacity: 0.75; }
+.foot > span { white-space: nowrap; }
 
 /* Narrow screens: stack and scroll. Not the target, but still usable. */
 @media (max-width: 900px) {

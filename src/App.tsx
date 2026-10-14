@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState, type ReactNode } from 'react'
 import { inQuadrant, lastPlaced, nextUnplaced, place, statusLine, unplace, verdict, verdictLine } from './placement.ts'
-import { COLUMNS, QUADRANTS, ROWS, TASKS, TONES, type QuadrantId } from './tasks.ts'
+import { COLUMNS, GROUP_MEMBERS, QUADRANTS, ROWS, TASKS, TONES, type QuadrantId } from './tasks.ts'
 
 const FLIGHT_MS = 450
 const GLOW_MS = 900
@@ -192,7 +192,10 @@ export default function App() {
 
   return (
     <main className="slide">
-      <p className="kicker">Place a task · Your turn</p>
+      <div className="kicker-row">
+        <p className="kicker">Place a task · Your turn</p>
+        {canFullScreen && !fullScreen && <span className="fs-hint">Press F for full screen</span>}
+      </div>
       <h1 className="title">Where would you place each of these tasks, and who should lead it?</h1>
       {/* Once every card is down, the instruction has done its job and the slide hands the room a question. */}
       {placed.length === TASKS.length ? (
@@ -321,9 +324,8 @@ export default function App() {
       </section>
 
       <footer className="foot">
-        <span>MGMT 6110 · Week 7 · The Map of Human-AI Collaboration</span>
-        {canFullScreen && !fullScreen && <span className="foot-hint">Press F for full screen</span>}
-        <span>Human-AI Group 8 · SMU Lee Kong Chian School of Business</span>
+        <span>SMU · MGMT 6110 · Week 7 · The Map of Human-AI Collaboration</span>
+        <span>Human-AI Group 8{GROUP_MEMBERS.length > 0 && `: ${GROUP_MEMBERS.join(', ')}`}</span>
       </footer>
     </main>
   )

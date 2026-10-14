@@ -24,6 +24,8 @@ Everything the slide says about the tasks is in `src/tasks.ts`. Each task has a 
 | `ai-alone` | AI alone, with checks |
 | `person-decides` | A person decides, AI alongside |
 
+Add your names to `GROUP_MEMBERS` in the same file and they appear in the footer after "Human-AI Group 8".
+
 The order of `TASKS` is the order of the cards in the tray and the order a clicker places them. Run `npm test` after editing. It fails if a task points at a quadrant that does not exist or two tasks share an id.
 
 ## Presenting
@@ -57,5 +59,4 @@ tests/             node:test specs for placement.ts and the slide data
 
 ## Next
 
-- Add each group member's name to the footer.
-- Add a "guess first" mode that hides the reason until a second click.
+- Show a running tally of how many calls the class matched.

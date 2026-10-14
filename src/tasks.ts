@@ -28,6 +28,9 @@ export const ROWS = {
   alone: 'Work that either of them can do alone',
 } as const
 
+// Shown in the footer after "Human-AI Group 8". Leave empty to show the group name alone.
+export const GROUP_MEMBERS: string[] = []
+
 // What the two quadrant colours mean, shown as a legend above the map.
 export const TONES = {
   pink: 'A person leads',
