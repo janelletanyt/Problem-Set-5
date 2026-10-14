@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState, type ReactNode } from 'react'
 import { inQuadrant, lastPlaced, nextUnplaced, place, statusLine, unplace, verdict, verdictLine } from './placement.ts'
-import { COLUMNS, QUADRANTS, ROWS, TASKS, type QuadrantId } from './tasks.ts'
+import { COLUMNS, QUADRANTS, ROWS, TASKS, TONES, type QuadrantId } from './tasks.ts'
 
 const FLIGHT_MS = 450
 const GLOW_MS = 900
@@ -189,6 +189,14 @@ export default function App() {
             <span className="badge-dot" aria-hidden="true" />
             Human-AI Group 8
           </span>
+          <ul className="legend" aria-label="Colour key">
+            {(['pink', 'blue'] as const).map((tone) => (
+              <li key={tone}>
+                <span className={`swatch swatch-${tone}`} aria-hidden="true" />
+                {TONES[tone]}
+              </li>
+            ))}
+          </ul>
           <span className="status" aria-live="polite">
             {statusLine(placed.length, TASKS.length)}
           </span>

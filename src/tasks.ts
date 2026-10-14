@@ -28,6 +28,12 @@ export const ROWS = {
   alone: 'Work that either of them can do alone',
 } as const
 
+// What the two quadrant colours mean, shown as a legend above the map.
+export const TONES = {
+  pink: 'A person leads',
+  blue: 'AI does the work',
+} as const
+
 // Grid order: top left, top right, bottom left, bottom right.
 export const QUADRANTS: Quadrant[] = [
   { id: 'person-leads', name: 'A person leads, AI inside', tone: 'pink', row: 'together', col: 'right-answer' },

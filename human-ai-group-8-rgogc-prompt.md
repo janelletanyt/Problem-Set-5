@@ -12,7 +12,7 @@ A Vite + React + TypeScript project in `human-ai-group-8/` with plain CSS, a REA
 1. **Kicker** — small spaced capitals in teal: "PLACE A TASK · YOUR TURN".
 2. **Title** — "Where would you place each of these tasks, and who should lead it?"
 3. **Subtitle** — "Call the quadrant for each task before we click. The placements are our group's view, and you may well place some differently." This is the only place the slide tells the audience what to do.
-4. **Explainer panel** — a pale card with a crimson bar down its left edge. Inside, top left, a crimson pill badge with a small yellow dot: "HUMAN-AI GROUP 8". Top right, a monospace status line: "Click a task" before anything is placed, then "3 of 6 placed", then "All 6 placed".
+4. **Explainer panel** — a pale card with a crimson bar down its left edge. Inside, top left, a crimson pill badge with a small yellow dot: "HUMAN-AI GROUP 8". In the middle, a small muted colour key: a pink swatch "A person leads" and a blue swatch "AI does the work", so the room sees that the colours split the map diagonally by who is in charge. Top right, a monospace status line: "Click a task" before anything is placed, then "3 of 6 placed", then "All 6 placed".
 5. **The map** — inside the panel, a 2×2 grid with these labels, exactly as in the course slide:
    - Column headings: "Work with a right answer" (left), "Work with no single right answer" (right).
    - Row headings: "Work that people and AI must do together" (top), "Work that either of them can do alone" (bottom).
