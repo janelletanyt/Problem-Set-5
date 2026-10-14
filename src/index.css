@@ -213,6 +213,8 @@ body {
   gap: calc(var(--u) * 0.7) calc(var(--u) * 0.9);
 }
 
+/* Both axes in the same quiet grey, like the labels in an Apple spec table,
+   so the coloured quadrant names carry the hierarchy. */
 .col-head,
 .row-head {
   margin: 0;
@@ -221,12 +223,12 @@ body {
   line-height: 1.25;
   letter-spacing: -0.01em;
   text-align: center;
+  color: var(--secondary);
 }
 
 .row-head {
   align-self: center;
   padding: 0 calc(var(--u) * 0.6);
-  color: var(--secondary);
 }
 
 .quad {
