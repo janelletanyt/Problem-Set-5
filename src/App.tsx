@@ -182,10 +182,17 @@ export default function App() {
     <main className="slide">
       <p className="kicker">Place a task · Your turn</p>
       <h1 className="title">Where would you place each of these tasks, and who should lead it?</h1>
-      <p className="subtitle">
-        Call the quadrant for each task before we click. The placements are our group's view, and you may
-        well place some differently.
-      </p>
+      {/* Once every card is down, the instruction has done its job and the slide hands the room a question. */}
+      {placed.length === TASKS.length ? (
+        <p className="subtitle subtitle-closing" aria-live="polite">
+          All six are placed. Which one would you move, and why?
+        </p>
+      ) : (
+        <p className="subtitle">
+          Call the quadrant for each task before we click. The placements are our group's view, and you may
+          well place some differently.
+        </p>
+      )}
 
       <section className="panel" aria-label="Map of human-AI collaboration">
         <header className="panel-head">
