@@ -389,6 +389,28 @@ body {
 
 .reason strong { font-weight: 600; }
 
+.reason-body {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--u) * 0.2);
+}
+
+.reason .reason-top {
+  font-size: calc(var(--u) * 1.1);
+  line-height: 1.3;
+}
+
+.reason-sep {
+  margin: 0 calc(var(--u) * 0.45);
+  color: var(--tertiary);
+}
+
+.reason .reason-text {
+  font-size: calc(var(--u) * 1.45);
+  line-height: 1.35;
+  letter-spacing: -0.012em;
+}
+
 .reason-start { color: var(--secondary); }
 
 .verdict { font-weight: 600; }

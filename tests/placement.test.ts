@@ -95,10 +95,10 @@ test('verdict compares the class call with ours', () => {
 })
 
 test('verdictLine reads naturally in all three cases', () => {
-  assert.equal(verdictLine(undefined, 'AI alone, with checks'), 'lands in AI alone, with checks.')
+  assert.equal(verdictLine(undefined, 'AI alone, with checks'), 'Placed in AI alone, with checks')
   assert.equal(
     verdictLine('AI alone, with checks', 'AI alone, with checks'),
-    'The class called AI alone, with checks, and so did we.',
+    'The class agreed: AI alone, with checks',
   )
   assert.equal(
     verdictLine('Agents run it, a person judges', 'AI alone, with checks'),

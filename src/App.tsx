@@ -291,13 +291,19 @@ export default function App() {
                 the card again to reveal without a call.
               </p>
             ) : shownTask ? (
-              <p>
-                <strong>{shownTask.label}</strong>{' '}
-                <span className={`verdict verdict-${shownVerdict}`}>
-                  {verdictLine(quadName(guesses[shownTask.id]), quadName(shownTask.quadrant) ?? '')}
-                </span>{' '}
-                {shownTask.reason}
-              </p>
+              // Two levels, as on apple.com: a small line with the task and verdict, the reason larger below.
+              <div className="reason-body">
+                <p className="reason-top">
+                  <strong>{shownTask.label}</strong>
+                  <span className="reason-sep" aria-hidden="true">
+                    ·
+                  </span>
+                  <span className={`verdict verdict-${shownVerdict}`}>
+                    {verdictLine(quadName(guesses[shownTask.id]), quadName(shownTask.quadrant) ?? '')}
+                  </span>
+                </p>
+                <p className="reason-text">{shownTask.reason}</p>
+              </div>
             ) : (
               <p className="reason-start">Pick a task below to start.</p>
             )}

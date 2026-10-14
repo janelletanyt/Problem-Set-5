@@ -62,9 +62,9 @@ export function verdict(guess: string | undefined, ours: string): Verdict {
   return guess === ours ? 'agree' : 'differ'
 }
 
-/** The sentence after the task name in the reason panel. Takes quadrant names, not ids. */
+/** The verdict on the reason panel's top line, after the task name. Takes quadrant names, not ids. */
 export function verdictLine(guessName: string | undefined, oursName: string): string {
-  if (guessName === undefined) return `lands in ${oursName}.`
-  if (guessName === oursName) return `The class called ${oursName}, and so did we.`
+  if (guessName === undefined) return `Placed in ${oursName}`
+  if (guessName === oursName) return `The class agreed: ${oursName}`
   return `The class called ${guessName}. We placed it in ${oursName}.`
 }
