@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState, type ReactNode } from 'react'
-import { inQuadrant, lastPlaced, nextUnplaced, place, statusLine, unplace } from './placement.ts'
+import { inQuadrant, lastPlaced, nextUnplaced, place, statusLine, unplace, verdict, verdictLine } from './placement.ts'
 import { COLUMNS, QUADRANTS, ROWS, TASKS, type QuadrantId } from './tasks.ts'
 
 const FLIGHT_MS = 450
@@ -11,10 +11,16 @@ const reducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)'
 export default function App() {
   const [placed, setPlaced] = useState<string[]>([])
   const [shown, setShown] = useState<string | null>(null)
+  // A card lifted out of the tray, waiting for the presenter to click the quadrant the class called.
+  const [pending, setPending] = useState<string | null>(null)
+  // The class's call for each placed card, when one was recorded.
+  const [guesses, setGuesses] = useState<Record<string, QuadrantId>>({})
 
-  // Mirror of `placed` so timers and key handlers never read a stale value.
+  // Mirrors so timers and key handlers never read a stale value.
   const placedRef = useRef<string[]>([])
   placedRef.current = placed
+  const pendingRef = useRef<string | null>(null)
+  pendingRef.current = pending
 
   // The element currently showing each card (tray chip or map chip), and each quadrant.
   const cardEls = useRef(new Map<string, HTMLElement>())
@@ -30,7 +36,10 @@ export default function App() {
 
   const recordFlight = (id: string, glow?: QuadrantId) => {
     const el = cardEls.current.get(id)
-    if (el) flights.current.set(id, { from: el.getBoundingClientRect(), glow, hadFocus: el.contains(document.activeElement) })
+    const active = document.activeElement
+    // A quadrant's pick button vanishes once the card lands, so focus follows the card instead.
+    const hadFocus = !!el?.contains(active) || !!active?.classList.contains('quad-pick')
+    if (el) flights.current.set(id, { from: el.getBoundingClientRect(), glow, hadFocus })
   }
 
   // FLIP: after React moves a card, start it where it was and glide it home.
@@ -73,21 +82,33 @@ export default function App() {
     flights.current.clear()
   }, [placed])
 
-  const placeCard = useCallback((id: string) => {
+  const placeCard = useCallback((id: string, guess?: QuadrantId) => {
     if (placedRef.current.includes(id)) return
     const task = TASKS.find((t) => t.id === id)
     if (!task) return
     recordFlight(id, task.quadrant)
     placedRef.current = place(placedRef.current, id)
     setPlaced(placedRef.current)
+    setGuesses((g) => {
+      const { [id]: _old, ...rest } = g
+      return guess ? { ...rest, [id]: guess } : rest
+    })
+    setPending((p) => (p === id ? null : p))
     setShown(id)
   }, [])
+
+  // First click lifts a tray card; a second click on the same card reveals it without a call.
+  const pickCard = (id: string) => {
+    if (pendingRef.current === id) placeCard(id)
+    else setPending(id)
+  }
 
   const returnCard = useCallback((id: string) => {
     if (!placedRef.current.includes(id)) return
     recordFlight(id)
     placedRef.current = unplace(placedRef.current, id)
     setPlaced(placedRef.current)
+    setGuesses(({ [id]: _old, ...rest }) => rest)
     // If its reason was showing, show the card placed before it instead.
     setShown((s) => (s === id ? (lastPlaced(placedRef.current) ?? null) : s))
   }, [])
@@ -99,6 +120,7 @@ export default function App() {
 
   const showAll = () => {
     cancelTimers()
+    setPending(null)
     const remaining = TASKS.filter((t) => !placedRef.current.includes(t.id))
     remaining.forEach((t, i) => {
       timers.current.push(window.setTimeout(() => placeCard(t.id), i * SHOW_ALL_STEP_MS))
@@ -111,6 +133,8 @@ export default function App() {
     placedRef.current = []
     setPlaced([])
     setShown(null)
+    setPending(null)
+    setGuesses({})
   }
 
   useEffect(() => cancelTimers, [])
@@ -119,15 +143,23 @@ export default function App() {
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.metaKey || e.ctrlKey || e.altKey) return
+      if (e.key === 'Escape' && pendingRef.current) {
+        setPending(null)
+        return
+      }
       const forward = ['ArrowRight', 'ArrowDown', 'PageDown', ' ']
       const back = ['ArrowLeft', 'ArrowUp', 'PageUp']
       if (!forward.includes(e.key) && !back.includes(e.key)) return
       // Space on a focused button should press that button, as normal.
       if (e.key === ' ' && e.target instanceof HTMLButtonElement) return
       e.preventDefault()
+      // A clicker cannot point at a quadrant, so it reveals cards without a call.
+      const lifted = pendingRef.current
       if (forward.includes(e.key)) {
-        const next = nextUnplaced(placedRef.current, TASKS)
-        if (next) placeCard(next.id)
+        const next = lifted ?? nextUnplaced(placedRef.current, TASKS)?.id
+        if (next) placeCard(next)
+      } else if (lifted) {
+        setPending(null)
       } else {
         const last = lastPlaced(placedRef.current)
         if (last) returnCard(last)
@@ -137,8 +169,10 @@ export default function App() {
     return () => window.removeEventListener('keydown', onKey)
   }, [placeCard, returnCard])
 
+  const quadName = (id: string | undefined) => QUADRANTS.find((q) => q.id === id)?.name
   const shownTask = TASKS.find((t) => t.id === shown)
-  const shownQuadrant = shownTask && QUADRANTS.find((q) => q.id === shownTask.quadrant)
+  const pendingTask = TASKS.find((t) => t.id === pending)
+  const shownVerdict = shownTask ? verdict(guesses[shownTask.id], shownTask.quadrant) : 'none'
 
   return (
     <main className="slide">
@@ -169,12 +203,19 @@ export default function App() {
               {QUADRANTS.filter((q) => q.row === row).map((q) => (
                 <div
                   key={q.id}
-                  className={`quad quad-${q.tone}`}
+                  className={`quad quad-${q.tone}${pendingTask ? ' quad-open' : ''}`}
                   ref={(el) => {
                     if (el) quadEls.current.set(q.id, el)
                   }}
                 >
                   <h3 className="quad-name">{q.name}</h3>
+                  {pendingTask && (
+                    <button
+                      className="quad-pick"
+                      onClick={() => placeCard(pendingTask.id, q.id)}
+                      aria-label={`The class called ${q.name}`}
+                    />
+                  )}
                   <div className="quad-cards">
                     {inQuadrant(placed, TASKS, q.id).map((t) => (
                       <span key={t.id} ref={cardRef(t.id)} className="placed">
@@ -203,10 +244,18 @@ export default function App() {
         </div>
 
         <div className="reason" aria-live="polite">
-          {shownTask && shownQuadrant ? (
+          {pendingTask ? (
             <p>
-              <strong>{shownTask.label}</strong>
-              <span className="reason-where"> lands in {shownQuadrant.name}.</span> {shownTask.reason}
+              Where does the class put <strong>{pendingTask.label}</strong>? Click that quadrant, or click the
+              card again to reveal without a call.
+            </p>
+          ) : shownTask ? (
+            <p>
+              <strong>{shownTask.label}</strong>{' '}
+              <span className={`verdict verdict-${shownVerdict}`}>
+                {verdictLine(quadName(guesses[shownTask.id]), quadName(shownTask.quadrant) ?? '')}
+              </span>{' '}
+              {shownTask.reason}
             </p>
           ) : (
             <p className="reason-idle">Pick a task below to start.</p>
@@ -220,7 +269,13 @@ export default function App() {
                 {t.label}
               </span>
             ) : (
-              <button key={t.id} ref={cardRef(t.id)} className="card" onClick={() => placeCard(t.id)}>
+              <button
+                key={t.id}
+                ref={cardRef(t.id)}
+                className={`card${t.id === pending ? ' card-pending' : ''}`}
+                onClick={() => pickCard(t.id)}
+                aria-pressed={t.id === pending}
+              >
                 {t.label}
               </button>
             ),

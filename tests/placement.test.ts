@@ -8,6 +8,8 @@ import {
   statusLine,
   unplace,
   validateTasks,
+  verdict,
+  verdictLine,
 } from '../src/placement.ts'
 import { QUADRANTS, TASKS, type Task } from '../src/tasks.ts'
 
@@ -84,4 +86,22 @@ test('validateTasks catches typos', () => {
     'empty label: x',
     'empty reason: x',
   ])
+})
+
+test('verdict compares the class call with ours', () => {
+  assert.equal(verdict(undefined, 'ai-alone'), 'none')
+  assert.equal(verdict('ai-alone', 'ai-alone'), 'agree')
+  assert.equal(verdict('agents-run', 'ai-alone'), 'differ')
+})
+
+test('verdictLine reads naturally in all three cases', () => {
+  assert.equal(verdictLine(undefined, 'AI alone, with checks'), 'lands in AI alone, with checks.')
+  assert.equal(
+    verdictLine('AI alone, with checks', 'AI alone, with checks'),
+    'The class called AI alone, with checks, and so did we.',
+  )
+  assert.equal(
+    verdictLine('Agents run it, a person judges', 'AI alone, with checks'),
+    'The class called Agents run it, a person judges. We placed it in AI alone, with checks.',
+  )
 })

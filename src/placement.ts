@@ -53,3 +53,18 @@ export function validateTasks(tasks: readonly Task[], quadrants: readonly Quadra
   }
   return errors
 }
+
+export type Verdict = 'none' | 'agree' | 'differ'
+
+/** How the class's call compares with ours. No call means the card was revealed straight away. */
+export function verdict(guess: string | undefined, ours: string): Verdict {
+  if (guess === undefined) return 'none'
+  return guess === ours ? 'agree' : 'differ'
+}
+
+/** The sentence after the task name in the reason panel. Takes quadrant names, not ids. */
+export function verdictLine(guessName: string | undefined, oursName: string): string {
+  if (guessName === undefined) return `lands in ${oursName}.`
+  if (guessName === oursName) return `The class called ${oursName}, and so did we.`
+  return `The class called ${guessName}. We placed it in ${oursName}.`
+}

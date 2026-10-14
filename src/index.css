@@ -161,6 +161,29 @@ body {
   --glow: var(--blue-glow);
 }
 
+.quad { position: relative; }
+
+/* While a card waits for the class's call, every quadrant becomes one big button. */
+.quad-pick {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  border-radius: inherit;
+  background: transparent;
+  cursor: pointer;
+}
+
+.quad-open { border-style: dashed; }
+.quad-open:hover { border-style: solid; border-color: var(--ink); }
+
+.quad-pick:focus-visible {
+  outline: 3px solid var(--teal);
+  outline-offset: 2px;
+}
+
 .quad-pink {
   border-color: var(--pink-line);
   background: var(--pink-bg);
@@ -245,6 +268,12 @@ body {
   outline-offset: 1px;
 }
 
+.card-pending {
+  border-color: var(--crimson);
+  box-shadow: 0 6px 16px rgba(198, 42, 67, 0.25);
+  transform: translateY(-3px);
+}
+
 .card-current {
   background: var(--ink);
   color: #fff;
@@ -283,10 +312,10 @@ body {
 
 .reason-idle { color: var(--muted); }
 
-.reason-where {
-  color: var(--teal);
-  font-weight: 600;
-}
+.verdict { font-weight: 600; }
+.verdict-none,
+.verdict-agree { color: var(--teal); }
+.verdict-differ { color: var(--crimson); }
 
 /* Tray */
 
