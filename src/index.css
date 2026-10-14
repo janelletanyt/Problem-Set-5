@@ -1,29 +1,35 @@
-/* One 16:9 slide. --u scales with whichever of width or height is tighter,
-   so the whole slide fits a 1280x720 or 1920x1080 projector without scrolling. */
+/* One 16:9 slide, styled after apple.com.
+   Everything is sized in --u, one hundredth of the slide's width, so the slide is the
+   same picture at any window size: it shrinks or grows to fit and never scrolls. */
 
 :root {
   color-scheme: light;
-  --page: #ffffff;
-  --panel: #f7f9fb;
-  --ink: #14284b;
-  --muted: #5b6b82;
-  --rule: #dfe5ec;
-  --teal: #1f6f8b;
-  --crimson: #c62a43;
-  --gold: #f6c945;
-  --pink-bg: #fcf6fb;
-  --pink-line: #e3c6dd;
-  --pink-glow: rgba(198, 42, 67, 0.28);
-  --pink-strong: #a8467e;
-  --blue-bg: #f3f9fb;
-  --blue-line: #c3dbe4;
-  --blue-glow: rgba(31, 111, 139, 0.32);
-  --blue-strong: #1f6f8b;
-  --card-bg: #ffffff;
 
-  --display: Futura, "Avenir Next", "Century Gothic", "Trebuchet MS", sans-serif;
-  --body: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  --mono: "SF Mono", Menlo, Consolas, monospace;
+  /* Apple's neutrals */
+  --page: #ffffff;
+  --tile: #f5f5f7;
+  --ink: #1d1d1f;
+  --secondary: #6e6e73;
+  --tertiary: #86868b;
+  --hairline: #d2d2d7;
+  --chip-line: rgba(0, 0, 0, 0.08);
+
+  /* Accents */
+  --blue: #0071e3;          /* primary button, lifted card */
+  --eyebrow: #bf4800;       /* Apple's orange eyebrow */
+  --agree: #248a3d;
+  --differ: #d70015;
+
+  /* The two quadrant tones: pink = a person leads, blue = AI does the work */
+  --pink: #c8105a;
+  --pink-tint: #fdf0f5;
+  --pink-glow: rgba(200, 16, 90, 0.28);
+  --sky: #0066cc;
+  --sky-tint: #eef5fd;
+  --sky-glow: rgba(0, 102, 204, 0.28);
+
+  --sans: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Helvetica,
+    Arial, sans-serif;
 
   --u: min(1vw, 1.7778vh);
   /* Card text sizes, in --u. Big enough to read from the back of a lecture room. */
@@ -35,66 +41,78 @@
 
 html, body { margin: 0; height: 100%; }
 
+/* Phones must not enlarge small text on their own, or the scaled slide stops fitting. */
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+
 body {
   background: var(--page);
   color: var(--ink);
-  font-family: var(--body);
+  font-family: var(--sans);
   -webkit-font-smoothing: antialiased;
+  overflow: hidden;
 }
 
-#root { height: 100%; }
+/* The stage: the slide sits centred, letterboxed in white when the window is not 16:9. */
+#root {
+  height: 100dvh;
+  display: grid;
+  place-items: center;
+}
 
 .slide {
-  height: 100dvh;
-  max-width: calc(var(--u) * 100); /* stays 16:9 on any screen */
-  margin: 0 auto;
-  padding: calc(var(--u) * 1.6) calc(var(--u) * 3.6) calc(var(--u) * 1);
+  position: relative;
+  width: calc(var(--u) * 100);
+  height: calc(var(--u) * 56.25);
+  padding: calc(var(--u) * 1.8) calc(var(--u) * 3.6) calc(var(--u) * 1);
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 }
 
-.kicker-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-}
+/* Header */
 
-.fs-hint {
-  font-size: calc(var(--u) * 1.05);
-  color: var(--muted);
-  opacity: 0.75;
-}
+.head { text-align: center; }
 
 .kicker {
   margin: 0;
-  font-family: var(--display);
-  font-weight: 700;
-  font-size: calc(var(--u) * 1.15);
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--teal);
+  font-weight: 600;
+  font-size: calc(var(--u) * 1.25);
+  letter-spacing: -0.005em;
+  color: var(--eyebrow);
+}
+
+.fs-hint {
+  position: absolute;
+  top: calc(var(--u) * 1.9);
+  right: calc(var(--u) * 3.6);
+  font-size: calc(var(--u) * 0.95);
+  color: var(--tertiary);
 }
 
 .title {
-  margin: calc(var(--u) * 0.8) 0 0;
-  font-family: var(--display);
-  font-weight: 700;
-  font-size: calc(var(--u) * 2.35);
-  line-height: 1.2;
-  letter-spacing: 0.01em;
+  margin: calc(var(--u) * 0.4) 0 0;
+  font-weight: 600;
+  font-size: calc(var(--u) * 2.6);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
 }
 
 .subtitle {
-  margin: calc(var(--u) * 0.5) 0 calc(var(--u) * 0.9);
+  margin: calc(var(--u) * 0.6) 0 calc(var(--u) * 1.2);
   font-size: calc(var(--u) * 1.4);
-  line-height: 1.4;
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+  color: var(--secondary);
 }
 
+/* Once every card is placed, the subtitle becomes a question in Apple's gradient type. */
 .subtitle-closing {
-  color: var(--crimson);
-  font-family: var(--display);
-  font-weight: 700;
-  animation: fade-in 400ms ease-out;
+  font-weight: 600;
+  background: linear-gradient(90deg, var(--pink), #8a3ffc 50%, var(--sky));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: fade-in 500ms ease-out;
 }
 
 @keyframes fade-in {
@@ -102,19 +120,17 @@ body {
   to { opacity: 1; transform: none; }
 }
 
-/* Explainer panel */
+/* The big tile that holds the map, reason and tray */
 
 .panel {
   flex: 1;
   min-height: 0;
   display: flex;
   flex-direction: column;
-  gap: calc(var(--u) * 0.7);
-  background: var(--panel);
-  border: 1px solid var(--rule);
-  border-left: calc(var(--u) * 0.4) solid var(--crimson);
-  border-radius: 4px;
-  padding: calc(var(--u) * 0.9) calc(var(--u) * 1.4) calc(var(--u) * 0.9) calc(var(--u) * 1.6);
+  gap: calc(var(--u) * 0.8);
+  background: var(--tile);
+  border-radius: calc(var(--u) * 2);
+  padding: calc(var(--u) * 1.1) calc(var(--u) * 1.6) calc(var(--u) * 1.2);
 }
 
 .panel-head {
@@ -124,25 +140,13 @@ body {
 }
 
 .badge {
-  display: inline-flex;
-  align-items: center;
-  gap: calc(var(--u) * 0.6);
-  background: var(--crimson);
+  font-weight: 600;
+  font-size: calc(var(--u) * 1);
+  letter-spacing: -0.005em;
   color: #fff;
-  font-family: var(--display);
-  font-weight: 700;
-  font-size: calc(var(--u) * 1.05);
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  padding: calc(var(--u) * 0.4) calc(var(--u) * 1.1);
-  border-radius: 999px;
-}
-
-.badge-dot {
-  width: calc(var(--u) * 0.55);
-  height: calc(var(--u) * 0.55);
-  border-radius: 50%;
-  background: var(--gold);
+  background: var(--ink);
+  padding: calc(var(--u) * 0.35) calc(var(--u) * 1);
+  border-radius: 980px;
 }
 
 .legend {
@@ -151,8 +155,8 @@ body {
   margin: 0;
   padding: 0;
   list-style: none;
-  font-size: calc(var(--u) * 1.1);
-  color: var(--muted);
+  font-size: calc(var(--u) * 1.05);
+  color: var(--secondary);
 }
 
 .legend li {
@@ -162,22 +166,19 @@ body {
 }
 
 .swatch {
-  width: calc(var(--u) * 1.3);
-  height: calc(var(--u) * 1);
-  border-radius: 3px;
-  border: 2px solid var(--blue-strong);
-  background: var(--blue-line);
+  width: calc(var(--u) * 0.85);
+  height: calc(var(--u) * 0.85);
+  border-radius: 50%;
+  background: var(--sky);
 }
 
-.swatch-pink {
-  border-color: var(--pink-strong);
-  background: var(--pink-line);
-}
+.swatch-pink { background: var(--pink); }
 
 .status {
-  font-family: var(--mono);
-  font-weight: 700;
-  font-size: calc(var(--u) * 1.1);
+  font-size: calc(var(--u) * 1.05);
+  font-weight: 500;
+  color: var(--secondary);
+  font-variant-numeric: tabular-nums;
 }
 
 /* The 2x2 map */
@@ -186,41 +187,59 @@ body {
   flex: 1;
   min-height: 0;
   display: grid;
-  grid-template-columns: calc(var(--u) * 13) 1fr 1fr;
+  grid-template-columns: calc(var(--u) * 12) 1fr 1fr;
   /* Rows share the space equally, but a row grows if its cards need the room. */
   grid-template-rows: auto minmax(min-content, 1fr) minmax(min-content, 1fr);
-  gap: calc(var(--u) * 0.6) calc(var(--u) * 1);
-  background: #fff;
-  border-radius: 4px;
-  padding: calc(var(--u) * 0.5) calc(var(--u) * 1) calc(var(--u) * 0.6) 0;
+  gap: calc(var(--u) * 0.7) calc(var(--u) * 0.9);
 }
 
 .col-head,
 .row-head {
   margin: 0;
-  font-family: var(--display);
-  font-weight: 700;
-  font-size: calc(var(--u) * 1.35);
-  line-height: 1.3;
+  font-weight: 600;
+  font-size: calc(var(--u) * 1.25);
+  line-height: 1.25;
+  letter-spacing: -0.01em;
   text-align: center;
 }
 
 .row-head {
   align-self: center;
   padding: 0 calc(var(--u) * 0.6);
+  color: var(--secondary);
 }
 
 .quad {
+  position: relative;
   min-height: 0;
   overflow: hidden;
-  border: 2px solid var(--blue-line);
-  background: var(--blue-bg);
-  border-radius: 6px;
-  padding: calc(var(--u) * 0.6) calc(var(--u) * 0.9);
-  --glow: var(--blue-glow);
+  background: var(--sky-tint);
+  border-radius: calc(var(--u) * 1.4);
+  padding: calc(var(--u) * 0.8) calc(var(--u) * 1);
+  --tone: var(--sky);
+  --glow: var(--sky-glow);
 }
 
-.quad { position: relative; }
+.quad-pink {
+  background: var(--pink-tint);
+  --tone: var(--pink);
+  --glow: var(--pink-glow);
+}
+
+.quad-name {
+  margin: 0 0 calc(var(--u) * 0.55);
+  font-weight: 600;
+  font-size: calc(var(--u) * 1.3);
+  letter-spacing: -0.01em;
+  color: var(--tone);
+}
+
+.quad-cards {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: calc(var(--u) * 0.5);
+}
 
 /* While a card waits for the class's call, every quadrant becomes one big button. */
 .quad-pick {
@@ -235,63 +254,39 @@ body {
   cursor: pointer;
 }
 
-.quad-open { border-style: dashed; }
-.quad-open:hover { border-style: solid; border-color: var(--ink); }
+.quad-open { box-shadow: inset 0 0 0 2px rgba(0, 113, 227, 0.3); }
+.quad-open:hover { box-shadow: inset 0 0 0 3px var(--blue); }
 
 .quad-pick:focus-visible {
-  outline: 3px solid var(--teal);
+  outline: 3px solid var(--blue);
   outline-offset: 2px;
 }
 
-.quad-pink {
-  border-color: var(--pink-line);
-  background: var(--pink-bg);
-  --glow: var(--pink-glow);
-}
-
-.quad-name {
-  margin: 0 0 calc(var(--u) * 0.5);
-  font-family: var(--display);
-  font-weight: 700;
-  font-size: calc(var(--u) * 1.3);
-}
-
-.quad-cards {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-start;
-  gap: calc(var(--u) * 0.5);
-}
-
-/* Task cards */
+/* Task cards: white chips */
 
 .card {
   font: inherit;
-  font-family: var(--display);
-  font-weight: 600;
+  font-weight: 500;
   font-size: calc(var(--u) * var(--tray-card));
-  letter-spacing: 0.02em;
-  line-height: 1.25;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
   color: var(--ink);
-  background: var(--card-bg);
-  border: 1.5px solid var(--ink);
-  border-radius: 3px;
-  padding: calc(var(--u) * 0.45) calc(var(--u) * 0.85);
+  background: #fff;
+  border: 1px solid var(--chip-line);
+  border-radius: calc(var(--u) * 1.2);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  padding: calc(var(--u) * 0.5) calc(var(--u) * 1.05);
   cursor: pointer;
   text-align: left;
+  transition: box-shadow 150ms ease-out, transform 150ms ease-out;
 }
 
-.card:hover { background: #eef3f8; }
+.card:hover { box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1); }
 
 .card:focus-visible,
 .btn:focus-visible {
-  outline: 3px solid var(--teal);
+  outline: 3px solid var(--blue);
   outline-offset: 2px;
-}
-
-.card-placed {
-  font-size: calc(var(--u) * var(--map-card));
-  padding: calc(var(--u) * 0.35) calc(var(--u) * 0.75);
 }
 
 .placed {
@@ -299,18 +294,23 @@ body {
   display: inline-flex;
 }
 
+.card-placed {
+  font-size: calc(var(--u) * var(--map-card));
+  padding: calc(var(--u) * 0.4) calc(var(--u) * 0.95);
+}
+
 /* The small x that sends a placed card back. Hidden until you point at the card. */
 .card-x {
   position: absolute;
-  top: calc(var(--u) * -0.75);
-  right: calc(var(--u) * -0.75);
+  top: calc(var(--u) * -0.7);
+  right: calc(var(--u) * -0.7);
   width: max(24px, calc(var(--u) * 1.7));
   height: max(24px, calc(var(--u) * 1.7));
   border-radius: 50%;
   border: 2px solid #fff;
-  background: var(--crimson);
+  background: var(--ink);
   color: #fff;
-  font: 700 calc(var(--u) * 1.2) / 1 var(--body);
+  font: 500 calc(var(--u) * 1.2) / 1 var(--sans);
   display: grid;
   place-items: center;
   padding: 0;
@@ -323,91 +323,107 @@ body {
 .placed:focus-within .card-x { opacity: 1; }
 
 .card-x:focus-visible {
-  outline: 3px solid var(--teal);
+  outline: 3px solid var(--blue);
   outline-offset: 1px;
 }
 
 .card-pending {
-  border-color: var(--crimson);
-  box-shadow: 0 6px 16px rgba(198, 42, 67, 0.25);
+  border-color: transparent;
+  box-shadow: 0 0 0 3px var(--blue), 0 8px 20px rgba(0, 113, 227, 0.25);
   transform: translateY(-3px);
 }
 
 .card-current {
   background: var(--ink);
+  border-color: var(--ink);
   color: #fff;
 }
 
-.card-current:hover { background: #1f3964; }
-
-/* Where a placed card came from: its name stays, faint, so the tray never reads as blank boxes. */
+/* Where a placed card came from: its name stays, faint, so the tray never reads as blank. */
 .card-slot {
-  color: #a9b4c2;
-  background: transparent;
-  border: 1.5px dashed #c8d1dc;
+  color: #aeaeb2;
+  background: rgba(0, 0, 0, 0.035);
+  border-color: transparent;
+  box-shadow: none;
   cursor: default;
   user-select: none;
 }
 
-.card-slot:hover { background: transparent; }
+.card-slot:hover { box-shadow: none; }
 
-/* Reason strip */
+/* Reason strip: a white tile with a slim bar in the colour of the card's quadrant */
 
 .reason {
+  position: relative;
   background: #fff;
-  border-left: calc(var(--u) * 0.45) solid var(--teal);
-  transition: border-color 200ms ease-out;
-  padding: calc(var(--u) * 0.6) calc(var(--u) * 1.4);
+  border-radius: calc(var(--u) * 1.2);
+  padding: calc(var(--u) * 0.65) calc(var(--u) * 1.4) calc(var(--u) * 0.65) calc(var(--u) * 2);
   min-height: calc(var(--u) * 4.2);
   display: flex;
   align-items: center;
+  --bar: var(--hairline);
 }
 
-.reason-idle { border-left-color: #c8d1dc; }
-.reason-pink { border-left-color: var(--pink-strong); }
-.reason-blue { border-left-color: var(--blue-strong); }
-.reason-pending { border-left-color: var(--crimson); }
+.reason::before {
+  content: "";
+  position: absolute;
+  left: calc(var(--u) * 0.8);
+  top: calc(var(--u) * 0.8);
+  bottom: calc(var(--u) * 0.8);
+  width: calc(var(--u) * 0.35);
+  border-radius: 99px;
+  background: var(--bar);
+  transition: background-color 200ms ease-out;
+}
+
+.reason-pink { --bar: var(--pink); }
+.reason-blue { --bar: var(--sky); }
+.reason-pending { --bar: var(--blue); }
 
 .reason p {
   margin: 0;
   font-size: calc(var(--u) * 1.3);
   line-height: 1.45;
+  letter-spacing: -0.005em;
 }
 
-.reason strong { font-weight: 700; }
+.reason strong { font-weight: 600; }
 
-.reason-start { color: var(--muted); }
+.reason-start { color: var(--secondary); }
 
 .verdict { font-weight: 600; }
-.verdict-none,
-.verdict-agree { color: var(--teal); }
-.verdict-differ { color: var(--crimson); }
+.verdict-none { color: var(--secondary); }
+.verdict-agree { color: var(--agree); }
+.verdict-differ { color: var(--differ); }
 
-/* Tray */
+/* Tray and buttons */
 
 .tray {
   display: flex;
   flex-wrap: wrap;
-  gap: calc(var(--u) * 0.6);
+  gap: calc(var(--u) * 0.55);
 }
 
 .btn {
-  font-family: var(--display);
-  font-weight: 700;
+  font-family: var(--sans);
+  font-weight: 400;
   font-size: calc(var(--u) * var(--tray-card));
-  letter-spacing: 0.02em;
-  color: var(--ink);
-  background: #fff;
-  border: 1.5px solid var(--ink);
-  border-radius: 3px;
-  padding: calc(var(--u) * 0.45) calc(var(--u) * 1);
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+  color: var(--blue);
+  background: transparent;
+  border: 1px solid var(--blue);
+  border-radius: 980px;
+  padding: calc(var(--u) * 0.5) calc(var(--u) * 1.3);
   cursor: pointer;
 }
 
 .btn-solid {
-  background: var(--ink);
+  background: var(--blue);
   color: #fff;
 }
+
+.btn-solid:hover { background: #0077ed; }
 
 .btn:disabled {
   opacity: 0.35;
@@ -422,21 +438,25 @@ body {
   gap: calc(var(--u) * 2);
   margin-top: calc(var(--u) * 0.8);
   padding-top: calc(var(--u) * 0.7);
-  border-top: 1px solid var(--rule);
-  font-size: calc(var(--u) * 1.05);
-  color: var(--muted);
+  border-top: 1px solid var(--hairline);
+  font-size: calc(var(--u) * 1);
+  color: var(--tertiary);
 }
 
 .foot > span { white-space: nowrap; }
 
-/* Narrow screens: stack and scroll. Not the target, but still usable. */
-@media (max-width: 900px) {
-  :root { --u: 9px; }
-  .slide { height: auto; min-height: 100dvh; padding: 24px 16px; }
-  .map { grid-template-columns: 1fr 1fr; grid-template-rows: none; padding: 8px; }
-  .corner, .row-head { display: none; }
-  .quad { min-height: 110px; }
-  .foot { flex-direction: column; }
+/* A phone held upright shows the slide small; one line under it says to turn the phone. */
+.rotate-hint {
+  display: none;
+  margin: 0;
+  font-size: 14px;
+  color: var(--tertiary);
+  text-align: center;
+}
+
+@media (orientation: portrait) and (max-width: 600px) {
+  #root { align-content: center; gap: 16px; }
+  .rotate-hint { display: block; }
 }
 
 @media (prefers-reduced-motion: reduce) {

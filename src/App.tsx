@@ -1,5 +1,14 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState, type ReactNode } from 'react'
-import { inQuadrant, lastPlaced, nextUnplaced, place, statusLine, unplace, verdict, verdictLine } from './placement.ts'
+import {
+  inQuadrant,
+  lastPlaced,
+  nextUnplaced,
+  place,
+  statusLine,
+  unplace,
+  verdict,
+  verdictLine,
+} from './placement.ts'
 import { COLUMNS, GROUP_MEMBERS, QUADRANTS, ROWS, TASKS, TONES, type QuadrantId } from './tasks.ts'
 
 const FLIGHT_MS = 450
@@ -191,143 +200,143 @@ export default function App() {
     : (QUADRANTS.find((q) => q.id === shownTask?.quadrant)?.tone ?? 'idle')
 
   return (
-    <main className="slide">
-      <div className="kicker-row">
-        <p className="kicker">Place a task · Your turn</p>
+    <>
+      <main className="slide">
         {canFullScreen && !fullScreen && <span className="fs-hint">Press F for full screen</span>}
-      </div>
-      <h1 className="title">Where would you place each of these tasks, and who should lead it?</h1>
-      {/* Once every card is down, the instruction has done its job and the slide hands the room a question. */}
-      {placed.length === TASKS.length ? (
-        <p className="subtitle subtitle-closing" aria-live="polite">
-          All six are placed. Which one would you move, and why?
-        </p>
-      ) : (
-        <p className="subtitle">
-          Call the quadrant for each task before we click. The placements are our group's view, and you may
-          well place some differently.
-        </p>
-      )}
-
-      <section className="panel" aria-label="Map of human-AI collaboration">
-        <header className="panel-head">
-          <span className="badge">
-            <span className="badge-dot" aria-hidden="true" />
-            Human-AI Group 8
-          </span>
-          <ul className="legend" aria-label="Colour key">
-            {(['pink', 'blue'] as const).map((tone) => (
-              <li key={tone}>
-                <span className={`swatch swatch-${tone}`} aria-hidden="true" />
-                {TONES[tone]}
-              </li>
-            ))}
-          </ul>
-          <span className="status" aria-live="polite">
-            {statusLine(placed.length, TASKS.length)}
-          </span>
-        </header>
-
-        <div className="map">
-          <span className="corner" aria-hidden="true" />
-          <h2 className="col-head">{COLUMNS['right-answer']}</h2>
-          <h2 className="col-head">{COLUMNS['no-single-answer']}</h2>
-          {(['together', 'alone'] as const).map((row) => (
-            <Row key={row} row={row}>
-              {QUADRANTS.filter((q) => q.row === row).map((q) => (
-                <div
-                  key={q.id}
-                  className={`quad quad-${q.tone}${pendingTask ? ' quad-open' : ''}`}
-                  ref={(el) => {
-                    if (el) quadEls.current.set(q.id, el)
-                  }}
-                >
-                  <h3 className="quad-name">{q.name}</h3>
-                  {pendingTask && (
-                    <button
-                      className="quad-pick"
-                      onClick={() => placeCard(pendingTask.id, q.id)}
-                      aria-label={`The class called ${q.name}`}
-                    />
-                  )}
-                  <div className="quad-cards">
-                    {inQuadrant(placed, TASKS, q.id).map((t) => (
-                      <span key={t.id} ref={cardRef(t.id)} className="placed">
-                        <button
-                          className={`card card-placed${t.id === shown ? ' card-current' : ''}`}
-                          onClick={() => setShown(t.id)}
-                          aria-pressed={t.id === shown}
-                        >
-                          {t.label}
-                        </button>
-                        <button
-                          className="card-x"
-                          onClick={() => returnCard(t.id)}
-                          aria-label={`Send ${t.label} back to the tray`}
-                          title="Send back to the tray"
-                        >
-                          ×
-                        </button>
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </Row>
-          ))}
-        </div>
-
-        <div className={`reason reason-${reasonTone}`} aria-live="polite">
-          {pendingTask ? (
-            <p>
-              Where does the class put <strong>{pendingTask.label}</strong>? Click that quadrant, or click the
-              card again to reveal without a call.
-            </p>
-          ) : shownTask ? (
-            <p>
-              <strong>{shownTask.label}</strong>{' '}
-              <span className={`verdict verdict-${shownVerdict}`}>
-                {verdictLine(quadName(guesses[shownTask.id]), quadName(shownTask.quadrant) ?? '')}
-              </span>{' '}
-              {shownTask.reason}
+        <header className="head">
+          <p className="kicker">Place a task · Your turn</p>
+          <h1 className="title">Where would you place each of these tasks, and who should lead it?</h1>
+          {/* Once every card is down, the instruction has done its job and the slide hands the room a question. */}
+          {placed.length === TASKS.length ? (
+            <p className="subtitle subtitle-closing" aria-live="polite">
+              All six are placed. Which one would you move, and why?
             </p>
           ) : (
-            <p className="reason-start">Pick a task below to start.</p>
+            <p className="subtitle">
+              Call the quadrant for each task before we click. The placements are our group's view, and you
+              may well place some differently.
+            </p>
           )}
-        </div>
+        </header>
 
-        <div className="tray">
-          {TASKS.map((t) =>
-            placed.includes(t.id) ? (
-              <span key={t.id} className="card card-slot" aria-hidden="true">
-                {t.label}
-              </span>
+        <section className="panel" aria-label="Map of human-AI collaboration">
+          <header className="panel-head">
+            <span className="badge">Human-AI Group 8</span>
+            <ul className="legend" aria-label="Colour key">
+              {(['pink', 'blue'] as const).map((tone) => (
+                <li key={tone}>
+                  <span className={`swatch swatch-${tone}`} aria-hidden="true" />
+                  {TONES[tone]}
+                </li>
+              ))}
+            </ul>
+            <span className="status" aria-live="polite">
+              {statusLine(placed.length, TASKS.length)}
+            </span>
+          </header>
+
+          <div className="map">
+            <span className="corner" aria-hidden="true" />
+            <h2 className="col-head">{COLUMNS['right-answer']}</h2>
+            <h2 className="col-head">{COLUMNS['no-single-answer']}</h2>
+            {(['together', 'alone'] as const).map((row) => (
+              <Row key={row} row={row}>
+                {QUADRANTS.filter((q) => q.row === row).map((q) => (
+                  <div
+                    key={q.id}
+                    className={`quad quad-${q.tone}${pendingTask ? ' quad-open' : ''}`}
+                    ref={(el) => {
+                      if (el) quadEls.current.set(q.id, el)
+                    }}
+                  >
+                    <h3 className="quad-name">{q.name}</h3>
+                    {pendingTask && (
+                      <button
+                        className="quad-pick"
+                        onClick={() => placeCard(pendingTask.id, q.id)}
+                        aria-label={`The class called ${q.name}`}
+                      />
+                    )}
+                    <div className="quad-cards">
+                      {inQuadrant(placed, TASKS, q.id).map((t) => (
+                        <span key={t.id} ref={cardRef(t.id)} className="placed">
+                          <button
+                            className={`card card-placed${t.id === shown ? ' card-current' : ''}`}
+                            onClick={() => setShown(t.id)}
+                            aria-pressed={t.id === shown}
+                          >
+                            {t.label}
+                          </button>
+                          <button
+                            className="card-x"
+                            onClick={() => returnCard(t.id)}
+                            aria-label={`Send ${t.label} back to the tray`}
+                            title="Send back to the tray"
+                          >
+                            ×
+                          </button>
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </Row>
+            ))}
+          </div>
+
+          <div className={`reason reason-${reasonTone}`} aria-live="polite">
+            {pendingTask ? (
+              <p>
+                Where does the class put <strong>{pendingTask.label}</strong>? Click that quadrant, or click
+                the card again to reveal without a call.
+              </p>
+            ) : shownTask ? (
+              <p>
+                <strong>{shownTask.label}</strong>{' '}
+                <span className={`verdict verdict-${shownVerdict}`}>
+                  {verdictLine(quadName(guesses[shownTask.id]), quadName(shownTask.quadrant) ?? '')}
+                </span>{' '}
+                {shownTask.reason}
+              </p>
             ) : (
-              <button
-                key={t.id}
-                ref={cardRef(t.id)}
-                className={`card${t.id === pending ? ' card-pending' : ''}`}
-                onClick={() => pickCard(t.id)}
-                aria-pressed={t.id === pending}
-              >
-                {t.label}
-              </button>
-            ),
-          )}
-          <button className="btn btn-solid" onClick={showAll} disabled={placed.length === TASKS.length}>
-            Show all
-          </button>
-          <button className="btn" onClick={clearAll} disabled={placed.length === 0}>
-            Clear
-          </button>
-        </div>
-      </section>
+              <p className="reason-start">Pick a task below to start.</p>
+            )}
+          </div>
 
-      <footer className="foot">
-        <span>SMU · MGMT 6110 · Week 7 · The Map of Human-AI Collaboration</span>
-        <span>Human-AI Group 8{GROUP_MEMBERS.length > 0 && `: ${GROUP_MEMBERS.join(', ')}`}</span>
-      </footer>
-    </main>
+          <div className="tray">
+            {TASKS.map((t) =>
+              placed.includes(t.id) ? (
+                <span key={t.id} className="card card-slot" aria-hidden="true">
+                  {t.label}
+                </span>
+              ) : (
+                <button
+                  key={t.id}
+                  ref={cardRef(t.id)}
+                  className={`card${t.id === pending ? ' card-pending' : ''}`}
+                  onClick={() => pickCard(t.id)}
+                  aria-pressed={t.id === pending}
+                >
+                  {t.label}
+                </button>
+              ),
+            )}
+            <button className="btn btn-solid" onClick={showAll} disabled={placed.length === TASKS.length}>
+              Show all
+            </button>
+            <button className="btn" onClick={clearAll} disabled={placed.length === 0}>
+              Clear
+            </button>
+          </div>
+        </section>
+
+        <footer className="foot">
+          <span>SMU · MGMT 6110 · Week 7 · The Map of Human-AI Collaboration</span>
+          <span>Human-AI Group 8{GROUP_MEMBERS.length > 0 && `: ${GROUP_MEMBERS.join(', ')}`}</span>
+        </footer>
+      </main>
+      <p className="rotate-hint">Turn your phone sideways for a bigger view.</p>
+    </>
   )
 }
 
