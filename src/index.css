@@ -316,8 +316,9 @@ body {
 
 .card-current:hover { background: #1f3964; }
 
+/* Where a placed card came from: its name stays, faint, so the tray never reads as blank boxes. */
 .card-slot {
-  color: transparent;
+  color: #a9b4c2;
   background: transparent;
   border: 1.5px dashed #c8d1dc;
   cursor: default;
