@@ -34,14 +34,15 @@ The order of `TASKS` is the order of the cards in the tray and the order a click
 - **Go full screen** with Ctrl+Cmd+F in Safari or Chrome on a Mac, or F11 on Windows. The slide scales to fit any 16:9 screen without scrolling.
 - **It works offline** once it has loaded, so a flaky classroom Wi-Fi does not matter. For extra safety, run `npm run build && npm run preview` on the presenting laptop.
 
-## Deploy to Vercel
+## Deploy
+
+Live at https://human-ai-group-8.vercel.app. The Vercel project is connected to this GitHub repo, so every push to `main` deploys to production on its own. Pushes to other branches get a preview link.
+
+To deploy straight from the laptop without pushing:
 
 ```bash
-npx -y vercel@latest link --yes
-npx -y vercel@latest deploy --prod --yes
+npx -y vercel@latest deploy --prod --yes --scope mbai3
 ```
-
-It is a static Vite build with `dist/` as the output, so Vercel's defaults work.
 
 ## Project layout
 
