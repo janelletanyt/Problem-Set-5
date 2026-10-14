@@ -165,14 +165,14 @@ body {
   gap: calc(var(--u) * 0.5);
 }
 
-.swatch {
-  width: calc(var(--u) * 0.85);
-  height: calc(var(--u) * 0.85);
-  border-radius: 50%;
-  background: var(--sky);
+.tone-icon {
+  width: 1.1em;
+  height: 1.1em;
+  flex: none;
 }
 
-.swatch-pink { background: var(--pink); }
+.legend-pink .tone-icon { color: var(--pink); }
+.legend-blue .tone-icon { color: var(--sky); }
 
 .status { display: flex; }
 
@@ -247,6 +247,9 @@ body {
 }
 
 .quad-name {
+  display: flex;
+  align-items: center;
+  gap: 0.35em;
   margin: 0 0 calc(var(--u) * 0.55);
   font-weight: 600;
   font-size: calc(var(--u) * 1.3);

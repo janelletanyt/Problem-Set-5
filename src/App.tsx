@@ -9,7 +9,7 @@ import {
   verdict,
   verdictLine,
 } from './placement.ts'
-import { CheckCircle, Swap } from './icons.tsx'
+import { CheckCircle, Swap, TONE_ICON } from './icons.tsx'
 import { COLUMNS, GROUP_MEMBERS, QUADRANTS, ROWS, TASKS, TONES, type QuadrantId } from './tasks.ts'
 
 const FLIGHT_MS = 560
@@ -235,12 +235,15 @@ export default function App() {
           <header className="panel-head">
             <span className="badge">Human-AI Group 8</span>
             <ul className="legend" aria-label="Colour key">
-              {(['pink', 'blue'] as const).map((tone) => (
-                <li key={tone}>
-                  <span className={`swatch swatch-${tone}`} aria-hidden="true" />
-                  {TONES[tone]}
-                </li>
-              ))}
+              {(['pink', 'blue'] as const).map((tone) => {
+                const Icon = TONE_ICON[tone]
+                return (
+                  <li key={tone} className={`legend-${tone}`}>
+                    <Icon className="tone-icon" />
+                    {TONES[tone]}
+                  </li>
+                )
+              })}
             </ul>
             {/* Progress as page dots, like the iPhone home screen. Each dot fills in the colour of the
                 quadrant its card landed in; screen readers get the words instead. */}
@@ -272,7 +275,13 @@ export default function App() {
                       if (el) quadEls.current.set(q.id, el)
                     }}
                   >
-                    <h3 className="quad-name">{q.name}</h3>
+                    <h3 className="quad-name">
+                      {(() => {
+                        const Icon = TONE_ICON[q.tone]
+                        return <Icon className="tone-icon" />
+                      })()}
+                      {q.name}
+                    </h3>
                     {pendingTask && (
                       <button
                         className="quad-pick"
