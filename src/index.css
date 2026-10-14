@@ -330,12 +330,18 @@ body {
 
 .reason {
   background: #fff;
-  border-left: calc(var(--u) * 0.3) solid var(--teal);
+  border-left: calc(var(--u) * 0.45) solid var(--teal);
+  transition: border-color 200ms ease-out;
   padding: calc(var(--u) * 0.6) calc(var(--u) * 1.4);
   min-height: calc(var(--u) * 4.2);
   display: flex;
   align-items: center;
 }
+
+.reason-idle { border-left-color: #c8d1dc; }
+.reason-pink { border-left-color: var(--pink-strong); }
+.reason-blue { border-left-color: var(--blue-strong); }
+.reason-pending { border-left-color: var(--crimson); }
 
 .reason p {
   margin: 0;
@@ -345,7 +351,7 @@ body {
 
 .reason strong { font-weight: 700; }
 
-.reason-idle { color: var(--muted); }
+.reason-start { color: var(--muted); }
 
 .verdict { font-weight: 600; }
 .verdict-none,

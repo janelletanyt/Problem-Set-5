@@ -173,6 +173,10 @@ export default function App() {
   const shownTask = TASKS.find((t) => t.id === shown)
   const pendingTask = TASKS.find((t) => t.id === pending)
   const shownVerdict = shownTask ? verdict(guesses[shownTask.id], shownTask.quadrant) : 'none'
+  // The reason bar takes the colour of the quadrant the card landed in; crimson while a card waits.
+  const reasonTone = pendingTask
+    ? 'pending'
+    : (QUADRANTS.find((q) => q.id === shownTask?.quadrant)?.tone ?? 'idle')
 
   return (
     <main className="slide">
@@ -251,7 +255,7 @@ export default function App() {
           ))}
         </div>
 
-        <div className="reason" aria-live="polite">
+        <div className={`reason reason-${reasonTone}`} aria-live="polite">
           {pendingTask ? (
             <p>
               Where does the class put <strong>{pendingTask.label}</strong>? Click that quadrant, or click the
@@ -266,7 +270,7 @@ export default function App() {
               {shownTask.reason}
             </p>
           ) : (
-            <p className="reason-idle">Pick a task below to start.</p>
+            <p className="reason-start">Pick a task below to start.</p>
           )}
         </div>
 
