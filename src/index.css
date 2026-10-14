@@ -1,0 +1,322 @@
+/* One 16:9 slide. --u scales with whichever of width or height is tighter,
+   so the whole slide fits a 1280x720 or 1920x1080 projector without scrolling. */
+
+:root {
+  color-scheme: light;
+  --page: #ffffff;
+  --panel: #f7f9fb;
+  --ink: #14284b;
+  --muted: #5b6b82;
+  --rule: #dfe5ec;
+  --teal: #1f6f8b;
+  --crimson: #c62a43;
+  --gold: #f6c945;
+  --pink-bg: #fcf6fb;
+  --pink-line: #e3c6dd;
+  --pink-glow: rgba(198, 42, 67, 0.28);
+  --blue-bg: #f3f9fb;
+  --blue-line: #c3dbe4;
+  --blue-glow: rgba(31, 111, 139, 0.32);
+  --card-bg: #ffffff;
+
+  --display: Futura, "Avenir Next", "Century Gothic", "Trebuchet MS", sans-serif;
+  --body: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --mono: "SF Mono", Menlo, Consolas, monospace;
+
+  --u: min(1vw, 1.7778vh);
+}
+
+* { box-sizing: border-box; }
+
+html, body { margin: 0; height: 100%; }
+
+body {
+  background: var(--page);
+  color: var(--ink);
+  font-family: var(--body);
+  -webkit-font-smoothing: antialiased;
+}
+
+#root { height: 100%; }
+
+.slide {
+  height: 100dvh;
+  max-width: calc(var(--u) * 100); /* stays 16:9 on any screen */
+  margin: 0 auto;
+  padding: calc(var(--u) * 1.6) calc(var(--u) * 3.6) calc(var(--u) * 1);
+  display: flex;
+  flex-direction: column;
+}
+
+.kicker {
+  margin: 0;
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: calc(var(--u) * 1.15);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--teal);
+}
+
+.title {
+  margin: calc(var(--u) * 0.8) 0 0;
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: calc(var(--u) * 2.35);
+  line-height: 1.2;
+  letter-spacing: 0.01em;
+}
+
+.subtitle {
+  margin: calc(var(--u) * 0.5) 0 calc(var(--u) * 0.9);
+  font-size: calc(var(--u) * 1.4);
+  line-height: 1.4;
+}
+
+/* Explainer panel */
+
+.panel {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--u) * 0.7);
+  background: var(--panel);
+  border: 1px solid var(--rule);
+  border-left: calc(var(--u) * 0.4) solid var(--crimson);
+  border-radius: 4px;
+  padding: calc(var(--u) * 0.9) calc(var(--u) * 1.4) calc(var(--u) * 0.9) calc(var(--u) * 1.6);
+}
+
+.panel-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: calc(var(--u) * 0.6);
+  background: var(--crimson);
+  color: #fff;
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: calc(var(--u) * 1.05);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: calc(var(--u) * 0.4) calc(var(--u) * 1.1);
+  border-radius: 999px;
+}
+
+.badge-dot {
+  width: calc(var(--u) * 0.55);
+  height: calc(var(--u) * 0.55);
+  border-radius: 50%;
+  background: var(--gold);
+}
+
+.status {
+  font-family: var(--mono);
+  font-weight: 700;
+  font-size: calc(var(--u) * 1.1);
+}
+
+/* The 2x2 map */
+
+.map {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: calc(var(--u) * 15) 1fr 1fr;
+  grid-template-rows: auto 1fr 1fr;
+  gap: calc(var(--u) * 0.6) calc(var(--u) * 1);
+  background: #fff;
+  border-radius: 4px;
+  padding: calc(var(--u) * 0.5) calc(var(--u) * 1) calc(var(--u) * 0.6) 0;
+}
+
+.col-head,
+.row-head {
+  margin: 0;
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: calc(var(--u) * 1.35);
+  line-height: 1.3;
+  text-align: center;
+}
+
+.row-head {
+  align-self: center;
+  padding: 0 calc(var(--u) * 1.2);
+}
+
+.quad {
+  min-height: 0;
+  overflow: hidden;
+  border: 2px solid var(--blue-line);
+  background: var(--blue-bg);
+  border-radius: 6px;
+  padding: calc(var(--u) * 0.6) calc(var(--u) * 0.9);
+  --glow: var(--blue-glow);
+}
+
+.quad-pink {
+  border-color: var(--pink-line);
+  background: var(--pink-bg);
+  --glow: var(--pink-glow);
+}
+
+.quad-name {
+  margin: 0 0 calc(var(--u) * 0.5);
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: calc(var(--u) * 1.3);
+}
+
+.quad-cards {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: calc(var(--u) * 0.5);
+}
+
+/* Task cards */
+
+.card {
+  font: inherit;
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: calc(var(--u) * 1.25);
+  letter-spacing: 0.02em;
+  line-height: 1.25;
+  color: var(--ink);
+  background: var(--card-bg);
+  border: 1.5px solid var(--ink);
+  border-radius: 3px;
+  padding: calc(var(--u) * 0.45) calc(var(--u) * 0.85);
+  cursor: pointer;
+  text-align: left;
+}
+
+.card:hover { background: #eef3f8; }
+
+.card:focus-visible,
+.btn:focus-visible {
+  outline: 3px solid var(--teal);
+  outline-offset: 2px;
+}
+
+.card-placed {
+  font-size: calc(var(--u) * 1.15);
+  padding: calc(var(--u) * 0.35) calc(var(--u) * 0.75);
+}
+
+.card-current {
+  background: var(--ink);
+  color: #fff;
+}
+
+.card-current:hover { background: #1f3964; }
+
+.card-slot {
+  color: transparent;
+  background: transparent;
+  border: 1.5px dashed #c8d1dc;
+  cursor: default;
+  user-select: none;
+}
+
+.card-slot:hover { background: transparent; }
+
+/* Reason strip */
+
+.reason {
+  background: #fff;
+  border-left: calc(var(--u) * 0.3) solid var(--teal);
+  padding: calc(var(--u) * 0.6) calc(var(--u) * 1.4);
+  min-height: calc(var(--u) * 4.2);
+  display: flex;
+  align-items: center;
+}
+
+.reason p {
+  margin: 0;
+  font-size: calc(var(--u) * 1.3);
+  line-height: 1.45;
+}
+
+.reason strong { font-weight: 700; }
+
+.reason-where {
+  color: var(--teal);
+  font-weight: 600;
+}
+
+/* Tray */
+
+.tray {
+  display: flex;
+  flex-wrap: wrap;
+  gap: calc(var(--u) * 0.6);
+}
+
+.btn {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: calc(var(--u) * 1.25);
+  letter-spacing: 0.02em;
+  color: var(--ink);
+  background: #fff;
+  border: 1.5px solid var(--ink);
+  border-radius: 3px;
+  padding: calc(var(--u) * 0.45) calc(var(--u) * 1);
+  cursor: pointer;
+}
+
+.btn-solid {
+  background: var(--ink);
+  color: #fff;
+}
+
+.btn:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.hint {
+  margin: 0;
+  background: #eef2f6;
+  border-left: calc(var(--u) * 0.3) solid var(--teal);
+  padding: calc(var(--u) * 0.4) calc(var(--u) * 1.4);
+  font-size: calc(var(--u) * 1.1);
+  font-style: italic;
+  color: var(--teal);
+}
+
+/* Footer */
+
+.foot {
+  display: flex;
+  justify-content: space-between;
+  gap: calc(var(--u) * 2);
+  margin-top: calc(var(--u) * 0.8);
+  padding-top: calc(var(--u) * 0.7);
+  border-top: 1px solid var(--rule);
+  font-size: calc(var(--u) * 1.05);
+  color: var(--muted);
+}
+
+/* Narrow screens: stack and scroll. Not the target, but still usable. */
+@media (max-width: 900px) {
+  :root { --u: 9px; }
+  .slide { height: auto; min-height: 100dvh; padding: 24px 16px; }
+  .map { grid-template-columns: 1fr 1fr; grid-template-rows: none; padding: 8px; }
+  .corner, .row-head { display: none; }
+  .quad { min-height: 110px; }
+  .foot { flex-direction: column; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; animation: none !important; }
+}
