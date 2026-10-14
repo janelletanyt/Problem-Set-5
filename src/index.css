@@ -24,6 +24,9 @@
   --mono: "SF Mono", Menlo, Consolas, monospace;
 
   --u: min(1vw, 1.7778vh);
+  /* Card text sizes, in --u. Big enough to read from the back of a lecture room. */
+  --tray-card: 1.5;
+  --map-card: 1.6;
 }
 
 * { box-sizing: border-box; }
@@ -128,8 +131,9 @@ body {
   flex: 1;
   min-height: 0;
   display: grid;
-  grid-template-columns: calc(var(--u) * 15) 1fr 1fr;
-  grid-template-rows: auto 1fr 1fr;
+  grid-template-columns: calc(var(--u) * 13) 1fr 1fr;
+  /* Rows share the space equally, but a row grows if its cards need the room. */
+  grid-template-rows: auto minmax(min-content, 1fr) minmax(min-content, 1fr);
   gap: calc(var(--u) * 0.6) calc(var(--u) * 1);
   background: #fff;
   border-radius: 4px;
@@ -148,7 +152,7 @@ body {
 
 .row-head {
   align-self: center;
-  padding: 0 calc(var(--u) * 1.2);
+  padding: 0 calc(var(--u) * 0.6);
 }
 
 .quad {
@@ -210,7 +214,7 @@ body {
   font: inherit;
   font-family: var(--display);
   font-weight: 600;
-  font-size: calc(var(--u) * 1.25);
+  font-size: calc(var(--u) * var(--tray-card));
   letter-spacing: 0.02em;
   line-height: 1.25;
   color: var(--ink);
@@ -231,7 +235,7 @@ body {
 }
 
 .card-placed {
-  font-size: calc(var(--u) * 1.15);
+  font-size: calc(var(--u) * var(--map-card));
   padding: calc(var(--u) * 0.35) calc(var(--u) * 0.75);
 }
 
@@ -328,7 +332,7 @@ body {
 .btn {
   font-family: var(--display);
   font-weight: 700;
-  font-size: calc(var(--u) * 1.25);
+  font-size: calc(var(--u) * var(--tray-card));
   letter-spacing: 0.02em;
   color: var(--ink);
   background: #fff;
