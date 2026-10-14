@@ -231,8 +231,19 @@ export default function App() {
                 </li>
               ))}
             </ul>
-            <span className="status" aria-live="polite">
-              {statusLine(placed.length, TASKS.length)}
+            {/* Progress as page dots, like the iPhone home screen. Each dot fills in the colour of the
+                quadrant its card landed in; screen readers get the words instead. */}
+            <span className="status">
+              <span className="dots" aria-hidden="true">
+                {TASKS.map((_, i) => {
+                  const id = placed[i]
+                  const tone = id && QUADRANTS.find((q) => q.id === TASKS.find((t) => t.id === id)?.quadrant)?.tone
+                  return <span key={i} className={`dot${tone ? ` dot-${tone}` : ''}`} />
+                })}
+              </span>
+              <span className="sr-only" aria-live="polite">
+                {statusLine(placed.length, TASKS.length)}
+              </span>
             </span>
           </header>
 

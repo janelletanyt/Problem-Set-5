@@ -174,11 +174,31 @@ body {
 
 .swatch-pink { background: var(--pink); }
 
-.status {
-  font-size: calc(var(--u) * 1.05);
-  font-weight: 500;
-  color: var(--secondary);
-  font-variant-numeric: tabular-nums;
+.status { display: flex; }
+
+.dots {
+  display: flex;
+  gap: calc(var(--u) * 0.45);
+}
+
+.dot {
+  width: calc(var(--u) * 0.75);
+  height: calc(var(--u) * 0.75);
+  border-radius: 50%;
+  background: var(--hairline);
+  transition: background-color 300ms ease-out, transform 300ms ease-out;
+}
+
+.dot-pink { background: var(--pink); }
+.dot-blue { background: var(--sky); }
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
 }
 
 /* The 2x2 map */
