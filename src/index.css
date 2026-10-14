@@ -303,10 +303,24 @@ body {
   padding: calc(var(--u) * 0.5) calc(var(--u) * 1.05);
   cursor: pointer;
   text-align: left;
-  transition: box-shadow 150ms ease-out, transform 150ms ease-out;
+  transition: box-shadow 150ms ease-out, transform 150ms ease-out, scale 100ms ease-out;
 }
 
 .card:hover { box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1); }
+
+/* Pressed: controls shrink a touch while held, as on iOS, so every click feels confirmed. */
+.card:active,
+.btn:active:not(:disabled),
+.link:active,
+.card-x:active { scale: 0.97; }
+
+.quad:has(.quad-pick:active) { scale: 0.99; }
+
+.btn,
+.link,
+.quad { transition: scale 100ms ease-out; }
+
+.card-slot:active { scale: none; }
 
 .card:focus-visible,
 .btn:focus-visible {
@@ -342,7 +356,7 @@ body {
   padding: 0;
   cursor: pointer;
   opacity: 0;
-  transition: opacity 120ms ease-out;
+  transition: opacity 120ms ease-out, scale 100ms ease-out;
 }
 
 .placed:hover .card-x,
