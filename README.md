@@ -1,3 +1,12 @@
+# My Agent card | Tech News Digest | finished 20/10/2026, 9:40PM
+1. The job: Sends the user personal tech highlights from news sources around the world via email 
+2. The trigger: Schedule by Zapier - Every Day
+3. The tools: Code by Zapier - Run JavaScript to build daily Tech Digest content | Email by Zapier: Send Outbound Email to user's personal Gmail
+4. It must never: Send the user multiple highlights a day, provide information from non-verified sources
+5. Where a person checks: Inbound email, sent at 8:00AM SGT daily
+
+
+
 # Place a Task — Human-AI Group 8
 
 One interactive slide for our MGMT 6110 Week 7 presentation on the Map of Human-AI Collaboration. The class calls a quadrant, we click a task card, and the card glides into the quadrant we chose while our reason appears underneath.
