@@ -1,14 +1,341 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="color-scheme" content="light dark" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <title>Place a Task</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="color-scheme" content="light" />
+<title>Tech News Digest · Problem Set 5</title>
+<meta name="description" content="Problem Set 5 · Tech News Digest on the Map of Human-AI Collaboration" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&family=Source+Code+Pro:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --page:#f6f8f9; --card:#ffffff; --ink:#1f2933; --muted:#52606d; --line:#dfe6ea;
+    --teal:#0b5d63; --navy:#1d3557; --red:#c8102e;
+    --purple:#6a3f9a; --purple-tint:#f7f2fa; --purple-line:#d9c7e8;
+    --blue:#2a7a99; --blue-tint:#f0f6f9; --blue-line:#bcd8e4;
+    --row-tint:#edf2f6; --amber-bg:#fdf6dc; --amber-line:#ecd98f; --amber-ink:#7a5b00;
+    --serif:"Playfair Display", Georgia, serif;
+    --sans:"Source Sans 3", "Segoe UI", Helvetica, Arial, sans-serif;
+    --mono:"Source Code Pro", ui-monospace, Menlo, Consolas, monospace;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{margin:0;background:var(--page);color:var(--ink);font:400 18px/1.65 var(--sans);-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1100px;margin:0 auto;padding:40px 24px 64px}
+  a{color:var(--teal);text-underline-offset:3px}
+  h1,h2,h3{font-family:var(--serif);color:var(--navy);line-height:1.2;margin:0}
+  p{margin:0 0 14px}
+
+  /* Masthead */
+  .eyebrow{font:700 13px/1 var(--sans);letter-spacing:.12em;text-transform:uppercase;color:var(--teal);margin-bottom:12px}
+  .mast h1{font-size:clamp(32px,5vw,48px)}
+  .mast .sub{color:var(--muted);font-size:19px;margin-top:10px;max-width:720px}
+
+  /* Cards / sections */
+  .section{background:var(--card);border:1px solid var(--line);border-top:3px solid var(--teal);border-radius:10px;padding:32px 36px;margin-top:28px}
+  .section-head{display:flex;align-items:center;gap:14px;padding-bottom:16px;margin-bottom:22px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+  .num{width:34px;height:34px;border-radius:50%;background:var(--red);color:#fff;font:700 16px/34px var(--sans);text-align:center;flex:none}
+  .section-head h2{font-size:clamp(24px,3.2vw,32px)}
+  h3.sh{font-size:24px;color:var(--teal);margin:6px 0 12px}
+  .lead{max-width:760px}
+
+  /* Agent card */
+  .agent-card{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;margin:0;padding:0;list-style:none}
+  .agent-card li{background:var(--row-tint);border-radius:8px;padding:14px 16px}
+  .agent-card b{display:block;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--teal);margin-bottom:4px}
+  .agent-card .never{background:#fbeef0}
+  .agent-card .never b{color:var(--red)}
+
+  /* Map */
+  .map{display:grid;grid-template-columns:minmax(150px,.85fr) 1.4fr 1.4fr;gap:10px;margin:22px 0 10px}
+  .col-h{background:var(--navy);color:#fff;font:700 17px/1.3 var(--sans);text-align:center;border-radius:6px;padding:14px 10px}
+  .row-h{background:var(--row-tint);border-radius:6px;display:flex;align-items:center;justify-content:center;text-align:center;padding:18px;font:700 17px/1.45 var(--sans);color:var(--navy)}
+  .quad{position:relative;border-radius:6px;border:1px solid;padding:20px 22px 22px;text-align:center;cursor:pointer;background:none;font:inherit;color:inherit;transition:box-shadow .15s ease,transform .1s ease;min-height:200px;display:flex;flex-direction:column;align-items:center;justify-content:center}
+  .quad:hover{box-shadow:0 6px 18px rgba(29,53,87,.12)}
+  .quad:active{transform:scale(.99)}
+  .quad:focus-visible{outline:3px solid var(--teal);outline-offset:2px}
+  .q-purple{background:var(--purple-tint);border-color:var(--purple-line)}
+  .q-blue{background:var(--blue-tint);border-color:var(--blue-line)}
+  .quad svg{width:96px;height:58px;margin-bottom:8px}
+  .quad .q-title{font:700 clamp(19px,2.2vw,24px)/1.2 var(--serif)}
+  .q-purple .q-title{color:var(--purple)} .q-blue .q-title{color:var(--navy)}
+  .quad .q-desc{font-size:16px;color:var(--muted);margin-top:8px;max-width:260px}
+  .quad.is-mine{box-shadow:0 0 0 3px var(--blue) inset}
+  .quad.is-viewing{box-shadow:0 0 0 3px var(--teal)}
+  .quad.is-mine.is-viewing{box-shadow:0 0 0 3px var(--blue) inset,0 0 0 3px var(--teal)}
+  .pin{position:absolute;top:12px;left:50%;transform:translateX(-50%);display:inline-flex;align-items:center;gap:6px;background:var(--navy);color:#fff;font:700 14px/1 var(--sans);padding:7px 12px 7px 9px;border-radius:999px;white-space:nowrap;box-shadow:0 4px 12px rgba(29,53,87,.25)}
+  .pin i{width:9px;height:9px;border-radius:50%;background:#7fd1e8;display:block}
+  .quad.is-mine{padding-top:52px}
+  .map-status{font-weight:700;color:var(--teal);margin:6px 0 4px;min-height:1.6em}
+  .map-note{color:var(--muted);font-size:16px;margin:0;max-width:760px}
+  .move-note{margin-top:10px;background:var(--row-tint);border-left:4px solid var(--teal);border-radius:0 6px 6px 0;padding:12px 16px;font-size:16px;display:none}
+  .move-note.show{display:block}
+  .legend{display:flex;gap:18px;flex-wrap:wrap;font-size:15px;color:var(--muted);margin:4px 0 0}
+  .legend span{display:inline-flex;align-items:center;gap:6px}
+  .dot{width:12px;height:12px;border-radius:50%;display:inline-block;border:2px solid}
+  .dot.p{border-color:var(--purple)} .dot.b{border-color:var(--blue)}
+
+  /* Table */
+  .tbl-wrap{overflow-x:auto;margin-top:8px}
+  table{border-collapse:collapse;width:100%;min-width:760px;font-size:16px}
+  thead th{background:var(--row-tint);color:var(--teal);font:700 13px/1.35 var(--sans);letter-spacing:.08em;text-transform:uppercase;text-align:left;padding:14px 14px;vertical-align:bottom}
+  thead th.c{text-align:center}
+  tbody td{padding:14px;border-bottom:1px solid var(--line);vertical-align:top}
+  tbody td.c{text-align:center}
+  tbody tr td:first-child{border-left:5px solid}
+  tbody tr.r-purple td:first-child{border-left-color:var(--purple)}
+  tbody tr.r-blue td:first-child{border-left-color:var(--blue)}
+  tbody td small{display:block;color:var(--muted);font-size:14px}
+  tbody tr.is-mine{background:#e9f4f8}
+  tbody tr.is-viewing{outline:2px solid var(--teal);outline-offset:-2px}
+  .you{display:inline-block;margin-top:6px;background:var(--navy);color:#fff;font:700 12px/1 var(--sans);letter-spacing:.06em;text-transform:uppercase;padding:5px 8px;border-radius:4px}
+
+  /* Q1 */
+  .qbox{border:1px solid var(--line);border-left:5px solid var(--red);border-radius:8px;background:#fdfcfb;padding:26px 30px;margin-top:6px}
+  .qhead{display:flex;gap:16px;align-items:flex-start;margin-bottom:18px}
+  .qbadge{font:700 22px/1 var(--serif);color:var(--red);background:#fdecef;border:1px solid #f5c9d1;border-radius:8px;padding:10px 12px;flex:none}
+  .qhead h3{font-size:clamp(20px,2.6vw,25px)}
+  .part{margin:0 0 18px}
+  .part:last-child{margin-bottom:0}
+  .part h4{margin:0 0 6px;font:700 17px/1.4 var(--sans);color:var(--navy)}
+  .answer-quad{display:inline-block;font:700 20px/1.3 var(--serif);color:var(--navy);background:var(--blue-tint);border:1px solid var(--blue-line);border-radius:6px;padding:8px 14px}
+  .part ul{margin:6px 0 0;padding-left:22px}
+  .part li{margin-bottom:6px}
+
+  /* Log */
+  .log{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
+  .log div{border:1px solid var(--line);border-radius:8px;padding:16px 18px;background:#fff}
+  .log b{display:block;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--teal);margin-bottom:6px}
+  .log p{font-size:16px;margin:0 0 8px}
+  .log p:last-child{margin:0}
+  .log .err{border-color:#f0c8cf;background:#fff8f9}
+  .log .err b{color:var(--red)}
+
+  /* Reflection */
+  .reflect{font-size:19px;max-width:820px}
+  .reflect p{padding-left:18px;border-left:3px solid var(--line)}
+  .reflect strong{color:var(--navy)}
+
+  code{font:500 15px/1.4 var(--mono);background:var(--row-tint);border-radius:4px;padding:2px 7px;word-break:break-all}
+
+
+  footer{margin-top:36px;color:var(--muted);font-size:14px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:16px}
+
+  @media (max-width:760px){
+    body{font-size:17px}
+    .wrap{padding:28px 16px 48px}
+    .section{padding:24px 18px}
+    .qbox{padding:20px 18px}
+    .map{grid-template-columns:1fr 1fr;gap:8px}
+    .map .corner{display:none}
+    .col-h{font-size:14px;padding:10px 6px}
+    .row-h{grid-column:1 / -1;padding:10px;font-size:15px}
+    .quad{min-height:170px;padding:16px 10px}
+    .quad.is-mine{padding-top:48px}
+    .quad svg{width:72px;height:44px}
+    .quad .q-desc{font-size:14px}
+    .pin{font-size:12px;padding:6px 10px 6px 8px}
+  }
+  @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="mast">
+    <h1>Tech News Digest</h1>
+    <p class="sub">A Zapier agent that emails me one set of tech highlights from verified news sources around the world every morning. Below, I place it on our Week 7 map and explain what that means for the person in the loop.</p>
+  </header>
+
+  <!-- Agent card -->
+  <section class="section" aria-labelledby="card-h">
+    <div class="section-head"><span class="num">1</span><h2 id="card-h">My agent card</h2></div>
+    <ul class="agent-card">
+      <li><b>The job</b>Sends me personal tech highlights from news sources around the world, by email.</li>
+      <li><b>The trigger</b>Schedule by Zapier, every day.</li>
+      <li><b>The tools</b>Code by Zapier runs JavaScript to build the daily digest. Email by Zapier sends it as an outbound email to my personal Gmail.</li>
+      <li class="never"><b>It must never</b>Send me more than one digest a day, or use information from sources that aren't verified.</li>
+      <li><b>Where a person checks</b>My inbox, when the email arrives at 8:00 AM SGT each day.</li>
+    </ul>
+  </section>
+
+  <!-- Map -->
+  <section class="section" aria-labelledby="map-h">
+    <div class="section-head"><span class="num">2</span><h2 id="map-h">Place it on the map</h2></div>
+    <h3 class="sh">Our two-by-two map, with my agent on it</h3>
+    <p class="lead">Tech News Digest sits in <strong>AI alone, with checks</strong>. Tap any other quadrant to see what would have to change for my agent to move there. Its row in the table below is highlighted too.</p>
+
+    <div class="map" id="map">
+      <span class="corner" aria-hidden="true"></span>
+      <div class="col-h">Work with a right answer</div>
+      <div class="col-h">Work with no single right answer</div>
+
+      <div class="row-h">Work that people and AI must do together</div>
+      <button class="quad q-purple" data-q="person-leads" aria-pressed="false">
+        <svg viewBox="0 0 96 58" aria-hidden="true"><ellipse cx="48" cy="29" rx="44" ry="25" fill="none" stroke="#6a3f9a" stroke-width="2.5"/><ellipse cx="48" cy="31" rx="21" ry="11" fill="#f0f6f9" stroke="#2a7a99" stroke-width="2.5"/></svg>
+        <span class="q-title">A person leads, AI inside</span>
+        <span class="q-desc">The person leads and AI works inside.</span>
+      </button>
+      <button class="quad q-blue" data-q="agents-run" aria-pressed="false">
+        <svg viewBox="0 0 96 58" aria-hidden="true"><ellipse cx="48" cy="29" rx="44" ry="25" fill="none" stroke="#2a7a99" stroke-width="2.5"/><ellipse cx="48" cy="31" rx="21" ry="11" fill="#f7f2fa" stroke="#6a3f9a" stroke-width="2.5"/></svg>
+        <span class="q-title">Agents run it, a person judges</span>
+        <span class="q-desc">Agents run the process and a person judges inside it.</span>
+      </button>
+
+      <div class="row-h">Work that either of them can do alone</div>
+      <button class="quad q-blue is-mine" data-q="ai-alone" aria-pressed="false">
+        <span class="pin"><i></i>Tech News Digest</span>
+        <svg viewBox="0 0 96 58" aria-hidden="true"><ellipse cx="48" cy="29" rx="32" ry="20" fill="#e3eff5" stroke="#2a7a99" stroke-width="2.5"/></svg>
+        <span class="q-title">AI alone, with checks</span>
+        <span class="q-desc">AI does it, with spot checks.</span>
+      </button>
+      <button class="quad q-purple" data-q="person-decides" aria-pressed="false">
+        <svg viewBox="0 0 96 58" aria-hidden="true"><ellipse cx="62" cy="29" rx="20" ry="14" fill="none" stroke="#2a7a99" stroke-width="2.5"/><ellipse cx="40" cy="29" rx="31" ry="21" fill="#f7f2fa" fill-opacity=".85" stroke="#6a3f9a" stroke-width="2.5"/></svg>
+        <span class="q-title">A person decides, AI alongside</span>
+        <span class="q-desc">A person decides with AI alongside.</span>
+      </button>
+    </div>
+
+    <p class="map-status" id="map-status" aria-live="polite">My agent: AI alone, with checks (bottom left).</p>
+    <div class="move-note" id="move-note" aria-live="polite"></div>
+    <div class="legend"><span><i class="dot p"></i>Purple stands for the person</span><span><i class="dot b"></i>Blue stands for AI</span></div>
+
+    <h3 class="sh" style="margin-top:30px">What each quadrant means for the person in the loop</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr>
+          <th style="width:22%">Quadrant</th><th class="c" style="width:12%">A right answer?</th><th class="c" style="width:12%">Together or alone?</th><th style="width:28%">The person in the loop</th><th>An example from our Week 7 deck</th>
+        </tr></thead>
+        <tbody>
+          <tr class="r-purple" data-row="person-leads"><td><strong>A person leads, AI inside</strong><small>top left</small></td><td class="c">A right answer</td><td class="c">Must do it together</td><td>The person leads and AI works inside; the person signs off what AI has checked.</td><td>Bank: AI checks a loan file; a credit officer signs.</td></tr>
+          <tr class="r-blue" data-row="agents-run"><td><strong>Agents run it, a person judges</strong><small>top right</small></td><td class="c">No single right answer</td><td class="c">Must do it together</td><td>Agents run the process, and a person judges inside it at the judgement points.</td><td>Marketing: agents test ad versions; the brand manager picks.</td></tr>
+          <tr class="r-blue is-mine" data-row="ai-alone"><td><strong>AI alone, with checks</strong><small>bottom left</small><span class="you">My agent</span></td><td class="c">A right answer</td><td class="c">Either can do it alone</td><td>AI does it, with spot checks; a person reads its report or audits its log.</td><td>Bank: AI matches incoming payments to invoices. <em>Mine: the agent sends the digest; I read it at 8:00 AM.</em></td></tr>
+          <tr class="r-purple" data-row="person-decides"><td><strong>A person decides, AI alongside</strong><small>bottom right</small></td><td class="c">No single right answer</td><td class="c">Either can do it alone</td><td>A person decides with AI alongside, which drafts the options and checks the facts.</td><td>Bank: a banker plans a hard client negotiation, and AI drafts the options.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Q1 -->
+  <section class="section" aria-labelledby="q1-h">
+    <div class="section-head"><span class="num">3</span><h2 id="q1-h">My answer to Q1</h2></div>
+    <div class="qbox">
+      <div class="qhead"><span class="qbadge">Q1</span><h3>Where does my agent sit on our two-by-two map, and what does that mean for the person in the loop?</h3></div>
+
+      <div class="part">
+        <h4>(a) My quadrant</h4>
+        <span class="answer-quad">AI alone, with checks (bottom left)</span>
+      </div>
+
+      <div class="part">
+        <h4>(b) The two questions</h4>
+        <p><strong>Work with a right answer.</strong> Each day has a clear test of whether the job was done right: exactly one email arrives at 8:00 AM SGT, and every story in it is a tech story from a verified source. My runs show this. Every run in my Zap history follows the same three steps: the schedule fires, Code by Zapier builds the digest, and Email by Zapier sends one message. Over 4 runs from 17 October 2026 to 20 October 2026, I could check each digest against those rules and say whether it passed. The one time it failed (an unverified source, see the log below), the failure was clear-cut, which is what a right-answer task looks like.</p>
+        <p><strong>Work that either of them can do alone.</strong> I could read the news sites myself and write the same digest by hand, so a person can do this job alone. The agent also does it alone. There's no step inside the Zap where it waits for me. It collects, builds and sends the digest from start to finish, and I only see the finished email.</p>
+      </div>
+
+      <div class="part">
+        <h4>(c) The person in the loop</h4>
+        <ul>
+          <li><strong>Where I stay at the gate:</strong> after the work is done, not inside it. My check is the email in my inbox at 8:00 AM SGT, which works as the agent's daily report, plus the Zap history as its log.</li>
+          <li><strong>What I check:</strong> that only one digest arrived that day, that every story links back to a source on my verified list, and that the stories are current tech news. When something fails, I fix the code or the source list, not the email.</li>
+          <li><strong>What the agent may do alone:</strong> run on its schedule, choose and summarise the highlights, format the digest and send it to my own Gmail. It may not send more than one digest a day or use sources that aren't verified.</li>
+          <li><strong>What would move it:</strong> If the digest went to other people, such as a team or clients, I would want to approve it before it went out. If "highlights" came to mean my personal taste rather than verified news, there would be no single right answer. Together, those changes would move it to <em>Agents run it, a person judges</em>. If I only wanted options and picked the stories myself each morning, it would move to <em>A person decides, AI alongside</em>.</li>
+        </ul>
+      </div>
+
+      <div class="part">
+        <h4>(d) My group's view</h4>
+        <p>I agree with where my group placed its tasks in class, and I would answer both of the map's questions the same way the group did. My agent lands in the same quadrant as our group's <em>News briefing</em>, for the same reason: summarising the day's news from good sources is well-defined work AI can do alone, with a person checking against the original sources. The only edge case is the word "personal" in my agent's job. If personal meant taste, the right-answer question could tip the other way. My verified-source rule keeps it a right-answer task, so I'd keep it where the group would put it.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Collaboration log -->
+  <section class="section" aria-labelledby="log-h">
+    <div class="section-head"><span class="num">4</span><h2 id="log-h">Collaboration log</h2></div>
+    <div class="log">
+      <div>
+        <b>What I delegated to AI</b>
+        <p>The daily job itself: collecting tech highlights, building the digest in Code by Zapier and sending it with Email by Zapier.</p>
+        <p>Drafting this page and rebuilding our group's map with my agent on it (Claude).</p>
+      </div>
+      <div>
+        <b>What I checked, and how</b>
+        <p>I read each 8:00 AM email and confirmed that only one arrived that day.</p>
+        <p>I clicked through the stories to confirm each source was on my verified list.</p>
+        <p>I compared the Zap history against my inbox to look for duplicate or failed runs.</p>
+        <p>I reread this page against my agent card and my runs before publishing.</p>
+      </div>
+      <div class="err">
+        <b>One AI error I caught</b>
+        <p>One digest included a story from a source that wasn't verified, which broke my agent's "must never" rule.</p>
+        <p>I fixed it by limiting the Code step to an allowed list of verified sources, then checked the next run.</p>
+      </div>
+      <div>
+        <b>Time and cost</b>
+        <p>Time: about 1 hour to build and test, plus about 5 minutes a day to check.</p>
+        <p>Cost: S$0 on Zapier's free plan.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Reflection -->
+  <section class="section" aria-labelledby="ref-h">
+    <div class="section-head"><span class="num">5</span><h2 id="ref-h">Reflection</h2></div>
+    <div class="reflect">
+      <p><strong>Where it fitted:</strong> The agent fitted a well-defined, repeatable job (one digest a day from verified sources), so it could run alone and my only role was to read the result.</p>
+      <p><strong>Where it failed:</strong> It failed when a story from an unverified source got into the digest, which showed me that "verified sources only" was a rule I had written on the agent card but hadn't fully built into the code.</p>
+      <p><strong>What I would change:</strong> I would add an automatic source check before the email step and include a list of the sources each digest used, so my 8:00 AM check takes seconds and errors are caught before they reach my inbox.</p>
+    </div>
+  </section>
+
+  <footer><span>MGMT 6110 · Problem Set 5 · The Map of Human-AI Collaboration</span><span>Tech News Digest</span></footer>
+</div>
+
+<script>
+(() => {
+  const MINE = 'ai-alone';
+  const NAMES = {
+    'person-leads': 'A person leads, AI inside (top left)',
+    'agents-run': 'Agents run it, a person judges (top right)',
+    'ai-alone': 'AI alone, with checks (bottom left)',
+    'person-decides': 'A person decides, AI alongside (bottom right)'
+  };
+  const MOVES = {
+    'person-leads': 'To move here, I would have to lead the work and sign off each digest myself before it sent, for example if the digest fed into a decision I had to answer for.',
+    'agents-run': 'To move here, the job would need a judgement point inside the run: for example, the digest goes to a team and I approve the selection before it sends, with "highlights" meaning taste rather than verified news.',
+    'ai-alone': 'This is where my agent sits. It runs and sends the digest by itself, and I check the result in my inbox at 8:00 AM SGT.',
+    'person-decides': 'To move here, there would need to be no single right answer, and the agent would only draft options. For example, it suggests ten stories each morning and I pick the ones worth reading.'
+  };
+  const quads = [...document.querySelectorAll('.quad')];
+  const rows = [...document.querySelectorAll('tbody tr')];
+  const status = document.getElementById('map-status');
+  const note = document.getElementById('move-note');
+  let viewing = null;
+
+  function update() {
+    quads.forEach(q => {
+      const on = q.dataset.q === viewing;
+      q.classList.toggle('is-viewing', on);
+      q.setAttribute('aria-pressed', String(on));
+    });
+    rows.forEach(r => r.classList.toggle('is-viewing', r.dataset.row === viewing));
+    if (!viewing || viewing === MINE) {
+      status.textContent = 'My agent: ' + NAMES[MINE] + '.';
+    } else {
+      status.textContent = 'You marked: ' + NAMES[viewing] + '. My agent stays in ' + NAMES[MINE] + '.';
+    }
+    note.textContent = viewing ? MOVES[viewing] : '';
+    note.classList.toggle('show', !!viewing);
+  }
+  quads.forEach(q => q.addEventListener('click', () => {
+    viewing = viewing === q.dataset.q ? null : q.dataset.q;
+    update();
+  }));
+  update();
+})();
+</script>
+</body>
 </html>
